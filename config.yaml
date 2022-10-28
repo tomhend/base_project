@@ -37,3 +37,6 @@ optimizer_cfg:
   name: adam
   kwargs:
     lr: 0.001
+
+session_cfg:
+  epochs: 5

@@ -21,7 +21,7 @@ class BaseTrainer(ABC):
             loss = self.loss_fn(output, label)
             loss.backward()
             self.optimizer.step()
-            print(loss.item())
+            print(f'training loss: {loss.item()}')
     
     def val_epoch(self, dataloader: DataLoader) -> None:
         self.model.eval()

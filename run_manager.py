@@ -23,9 +23,15 @@ class RunManager:
         
         trainer_cfg = cfg['trainer_cfg']
         self.trainer = trainer_builder.build_trainer(trainer_cfg['name'], self.model, self.loss_fn, self.optimizer, self.device, **trainer_cfg.get('kwargs', {}))
+        
+        self.epochs = cfg['session_cfg']['epochs']
     
     def start_training(self) -> None:
-        self.trainer.train_epoch(self.train_dataloader)
+        for i in range(self.epochs):
+            print(f'starting epoch {i}')
+            self.trainer.train_epoch(self.train_dataloader)
+            self.trainer.val_epoch(self.val_dataloader)
+            
     
     @staticmethod
     def _create_dataloaders(cfg: dict) -> Tuple[DataLoader, DataLoader]:
