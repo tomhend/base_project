@@ -1,0 +1,39 @@
+train_dataset_cfg:
+  name: mock_image
+  kwargs:
+    size: 30
+    image_size: [3,256,256]
+    classes: 1000
+train_dataloader_cfg:
+  batch_size: 10
+  shuffle: True
+  num_workers: 4
+  drop_last: False
+
+val_dataset_cfg:
+  name: mock_image
+  kwargs:
+    size: 10
+    image_size: [3,256,256]
+    classes: 1000
+val_dataloader_cfg:
+  batch_size: 10
+  shuffle: False
+  num_workers: 4
+  drop_last: False
+
+trainer_cfg:
+  name: base_trainer
+
+model_cfg:
+  name: test_resnet
+  kwargs:
+    weights: null
+
+loss_cfg:
+  name: bce_logits
+
+optimizer_cfg:
+  name: adam
+  kwargs:
+    lr: 0.001

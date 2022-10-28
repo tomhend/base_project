@@ -6,14 +6,14 @@ from torch.utils.data import Dataset
 
 class MockImageDataset(Dataset):
     
-    def __init__(self, size: int, image_size: Tuple[int, ...], _transforms: torchvision.transforms = None) -> None:
+    def __init__(self, size: int, image_size: list[int], classes: int, _transforms: torchvision.transforms = None) -> None:
         super().__init__()
         
         self.size = size
         self.image_size = image_size
         self._transforms = _transforms
         self.img_cache = np.zeros((size, *image_size), dtype=np.float32)
-        self.outcomes = np.random.randint(0, 2, size=size)
+        self.outcomes = np.eye(classes)
         
     def __len__(self) -> int:
         return self.size
@@ -23,4 +23,4 @@ class MockImageDataset(Dataset):
         if not np.any(mock_img):
             mock_img = np.random.rand(*self.image_size)
             self.img_cache[index] = mock_img
-        return torch.Tensor(mock_img), torch.Tensor([self.outcomes[index]])
+        return torch.Tensor(mock_img), torch.Tensor(self.outcomes[index])
