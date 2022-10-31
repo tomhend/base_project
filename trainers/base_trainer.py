@@ -2,7 +2,7 @@ from abc import ABC
 import torch
 from torch.utils.data import DataLoader
 
-class BaseTrainer(ABC):
+class BaseTrainer:
     def __init__(self, model: torch.nn.Module, loss_fn: torch.nn.modules.loss._Loss, optimizer: torch.optim.Optimizer, device: str) -> None:
         self.model = model.to(device)
         self.optimizer = optimizer

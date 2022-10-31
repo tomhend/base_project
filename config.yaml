@@ -40,3 +40,9 @@ optimizer_cfg:
 
 session_cfg:
   epochs: 5
+
+log_cfg:
+  wandb_init:
+    project: base_project
+    job_type: prototype
+  log_fns: ['train_loss']

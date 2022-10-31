@@ -1,4 +1,5 @@
 from builders import dataset_builder, model_builder, trainer_builder, optimizer_builder, loss_builder
+from run_logger import RunLogger
 from typing import Tuple
 from torch.utils.data import DataLoader
 import torch
@@ -25,12 +26,18 @@ class RunManager:
         self.trainer = trainer_builder.build_trainer(trainer_cfg['name'], self.model, self.loss_fn, self.optimizer, self.device, **trainer_cfg.get('kwargs', {}))
         
         self.epochs = cfg['session_cfg']['epochs']
+        
+        log_cfg = cfg.get('log_cfg', None)
+        self.logger = RunLogger(log_cfg) if log_cfg else None
     
     def start_training(self) -> None:
         for i in range(self.epochs):
             print(f'starting epoch {i}')
             self.trainer.train_epoch(self.train_dataloader)
             self.trainer.val_epoch(self.val_dataloader)
+            
+            if self.logger:
+                self.logger.log(train_loss=5.0)
             
     
     @staticmethod
