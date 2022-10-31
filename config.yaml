@@ -45,4 +45,4 @@ log_cfg:
   wandb_init:
     project: base_project
     job_type: prototype
-  log_fns: ['train_loss']
+  log_fns: ['loss_train_step', 'loss_train_epoch', 'loss_val_epoch']

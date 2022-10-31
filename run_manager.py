@@ -29,15 +29,14 @@ class RunManager:
         
         log_cfg = cfg.get('log_cfg', None)
         self.logger = RunLogger(log_cfg) if log_cfg else None
+        if self.logger:
+            self.trainer.set_run_logger(self.logger)
     
     def start_training(self) -> None:
         for i in range(self.epochs):
             print(f'starting epoch {i}')
-            self.trainer.train_epoch(self.train_dataloader)
-            self.trainer.val_epoch(self.val_dataloader)
-            
-            if self.logger:
-                self.logger.log(train_loss=5.0)
+            self.trainer.train_epoch(self.train_dataloader, i)
+            self.trainer.val_epoch(self.val_dataloader, i)
             
     
     @staticmethod
