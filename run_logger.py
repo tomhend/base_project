@@ -1,12 +1,15 @@
 from typing import Callable
 import wandb
 import numpy as np
+import torch
 
 class RunLogger:
     LOG_FUNCTIONS = {}
     
-    def __init__(self, log_cfg: dict) -> None:
+    def __init__(self, cfg: dict) -> None:
+        log_cfg = cfg['log_cfg']
         wandb.init(**log_cfg['wandb_init'])
+        wandb.config = cfg
         self.selected_log_functions = self.select_log_functions(log_cfg['log_fns'])
     
     def log_train_step(self, **kwargs) -> None:
@@ -32,7 +35,7 @@ class RunLogger:
                 log_dict.update(function(self, 'val_step', **kwargs))
         
         wandb.log(log_dict)
-    
+
     def log_val_epoch(self, **kwargs) -> None:
         log_dict = {}
         for name, function in self.selected_log_functions.items():
@@ -49,25 +52,42 @@ class RunLogger:
             print('\n'.join(self.LOG_FUNCTIONS.keys()))
             raise
     
-    def register_function(name: str, moment: str, func_dict: dict):
+    def register_function(name: str, func_dict: dict):
         def decorate(fnc: Callable):
-            func_dict[name + '_' + moment] = fnc
+            func_dict[name] = fnc
             return fnc
         return decorate
     
-    @register_function('loss', 'train_step', LOG_FUNCTIONS)        
-    @register_function('loss', 'val_step', LOG_FUNCTIONS)        
+    @register_function('loss_train_step', LOG_FUNCTIONS)        
+    @register_function('loss_val_step', LOG_FUNCTIONS)        
     def loss(self, moment: str, **kwargs):
         loss_name = 'loss' + '_' + moment
         return {loss_name: kwargs['loss']}
     
-    @register_function('loss', 'train_epoch', LOG_FUNCTIONS)
-    @register_function('loss', 'val_epoch', LOG_FUNCTIONS)
+    @register_function('loss_train_epoch', LOG_FUNCTIONS)
+    @register_function('loss_val_epoch', LOG_FUNCTIONS)
     def avg_loss(self, moment: str, **kwargs):
         loss_name = 'avg_loss' + '_' + moment
         loss_list = kwargs['losses']
         return {loss_name: np.array(loss_list).mean()}
     
+    def mc_accuracy(self, moment: str, **kwargs):
+        accuracy_name = 'accuracy' + '_' + moment
+        output = kwargs['output']
+        label = kwargs['label']
+        n = len(output)
+        accuracy =  (output.argmax() == label.argmax()).sum()/n
+        
+        return {accuracy_name: accuracy.item()}
+    
+    @register_function('acc_train_epoch', LOG_FUNCTIONS)
+    @register_function('acc_val_epoch', LOG_FUNCTIONS)
+    def epoch_mc_accuracy(self, moment: str, **kwargs):
+        outputs = torch.cat(kwargs['outputs'])
+        labels = torch.cat(kwargs['labels'])
+        
+        return self.mc_accuracy(moment, output=outputs, label=labels)
+            
     
     
             

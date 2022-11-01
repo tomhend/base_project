@@ -29,6 +29,7 @@ class BaseTrainer:
             
             output = self.model(_input)
             loss = self.loss_fn(output, label)
+            
             loss.backward()
             self.optimizer.step()
             
@@ -41,7 +42,7 @@ class BaseTrainer:
                 losses.append(loss.item())
         
         if self.run_logger:
-            self.run_logger.log_train_epoch(_input=_input, label=label, output=output, losses=losses)
+            self.run_logger.log_train_epoch(_inputs=_inputs, labels=labels, outputs=outputs, losses=losses)
     
     def val_epoch(self, dataloader: DataLoader, epoch: int) -> None:
         self.model.eval()
@@ -67,5 +68,5 @@ class BaseTrainer:
                     losses.append(loss.item())
                 
             if self.run_logger:
-                self.run_logger.log_val_epoch(_input=_input, label=label, output=output, losses=losses)
+                self.run_logger.log_val_epoch(_inputs=_inputs, labels=labels, outputs=outputs, losses=losses)
             

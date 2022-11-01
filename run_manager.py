@@ -3,7 +3,7 @@ from run_logger import RunLogger
 from typing import Tuple
 from torch.utils.data import DataLoader
 import torch
-
+import logging
 
 class RunManager:
     def __init__(self, cfg: dict) -> None:
@@ -21,16 +21,17 @@ class RunManager:
         self.loss_fn = loss_builder.build_loss_function(loss_cfg['name'], **loss_cfg.get('kwargs', {}))
         
         self.device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+        logging.info(f'Running on {self.device}')
         
         trainer_cfg = cfg['trainer_cfg']
         self.trainer = trainer_builder.build_trainer(trainer_cfg['name'], self.model, self.loss_fn, self.optimizer, self.device, **trainer_cfg.get('kwargs', {}))
         
         self.epochs = cfg['session_cfg']['epochs']
         
-        log_cfg = cfg.get('log_cfg', None)
-        self.logger = RunLogger(log_cfg) if log_cfg else None
+        self.logger = RunLogger(cfg) if 'log_cfg' in cfg.keys() else None
         if self.logger:
             self.trainer.set_run_logger(self.logger)
+        
     
     def start_training(self) -> None:
         for i in range(self.epochs):
