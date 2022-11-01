@@ -3,7 +3,7 @@ train_dataset_cfg:
   kwargs:
     index_file_path: C:\Users\thendriks\code\git_repositories\base_project\input_files\nifti_input_train_csv.csv
 train_dataloader_cfg:
-  batch_size: 2
+  batch_size: 10
   shuffle: True
   num_workers: 4
   drop_last: False
@@ -26,7 +26,7 @@ model_cfg:
   kwargs:
     pretrain: True
     weights_path: C:\Users\thendriks\code\git_repositories\base_project\models\weights\resnet_50_23dataset.pth
-    input_shape: [128, 256, 256]
+    input_shape: [32, 256, 256]
     n_classes: 1
 
 loss_cfg:
@@ -35,7 +35,7 @@ loss_cfg:
 optimizer_cfg:
   name: adam
   kwargs:
-    lr: 0.00005
+    lr: 0.001
 
 session_cfg:
   epochs: 10
