@@ -5,7 +5,7 @@ train_dataset_cfg:
     image_size: [3,256,256]
     classes: 1000
 train_dataloader_cfg:
-  batch_size: 10
+  batch_size: 2
   shuffle: True
   num_workers: 4
   drop_last: False
@@ -17,7 +17,7 @@ val_dataset_cfg:
     image_size: [3,256,256]
     classes: 1000
 val_dataloader_cfg:
-  batch_size: 10
+  batch_size: 2
   shuffle: False
   num_workers: 4
   drop_last: False

@@ -35,8 +35,9 @@ class RunManager:
     
     def start_training(self) -> None:
         for i in range(self.epochs):
-            print(f'starting epoch {i}')
+            logging.info(f'starting training epoch {i}')
             self.trainer.train_epoch(self.train_dataloader, i)
+            logging.info(f'starting validation epoch {i}')
             self.trainer.val_epoch(self.val_dataloader, i)
             
     

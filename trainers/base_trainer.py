@@ -1,5 +1,5 @@
-from abc import ABC
 import torch
+from tqdm import tqdm
 from torch.utils.data import DataLoader
 from run_logger import RunLogger
 
@@ -22,7 +22,7 @@ class BaseTrainer:
         outputs = []
         losses = []
         
-        for _input, label in dataloader:
+        for _input, label in tqdm(dataloader):
             _input = _input.to(self.device)
             label = label.to(self.device)
             self.optimizer.zero_grad()
@@ -53,7 +53,7 @@ class BaseTrainer:
         losses = []
         
         with torch.no_grad():
-            for _input, label in dataloader:
+            for _input, label in tqdm(dataloader):
                 _input = _input.to(self.device)
                 label = label.to(self.device)
                 

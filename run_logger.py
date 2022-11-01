@@ -8,8 +8,7 @@ class RunLogger:
     
     def __init__(self, cfg: dict) -> None:
         log_cfg = cfg['log_cfg']
-        wandb.init(**log_cfg['wandb_init'])
-        wandb.config = cfg
+        wandb.init(**log_cfg['wandb_init'], config=cfg)
         self.selected_log_functions = self.select_log_functions(log_cfg['log_fns'])
     
     def log_train_step(self, **kwargs) -> None:
