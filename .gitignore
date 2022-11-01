@@ -7,6 +7,7 @@ code_scraps.ipynb
 data/*
 models/test_models/MedicalNet_pytorch_files2
 input_files/*
+models/weights/*
 # Ignore logs
 lightning_logs/*
 
