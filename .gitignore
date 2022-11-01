@@ -6,14 +6,10 @@ code_scraps.ipynb
 # Ignore data folders
 data/*
 models/test_models/MedicalNet_pytorch_files2
-<<<<<<< HEAD
 models/saved_models/*
 models/weights/*
 input_files/*
 
-=======
-input_files/*
->>>>>>> 1a1181a (add prosab dataset prototype)
 # Ignore logs
 lightning_logs/*
 

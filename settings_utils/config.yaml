@@ -1,9 +1,7 @@
 train_dataset_cfg:
-  name: mock_image
+  name: prosab_ct
   kwargs:
-    size: 10
-    image_size: [3,256,256]
-    classes: 1000
+    index_file_path: C:\Users\thendriks\code\git_repositories\base_project\input_files\nifti_input_train_csv.csv
 train_dataloader_cfg:
   batch_size: 2
   shuffle: True
@@ -11,13 +9,11 @@ train_dataloader_cfg:
   drop_last: False
 
 val_dataset_cfg:
-  name: mock_image
+  name: prosab_ct
   kwargs:
-    size: 2
-    image_size: [3,256,256]
-    classes: 1000
+    index_file_path: C:\Users\thendriks\code\git_repositories\base_project\input_files\nifti_input_val_csv.csv
 val_dataloader_cfg:
-  batch_size: 2
+  batch_size: 5
   shuffle: False
   num_workers: 4
   drop_last: False
@@ -26,12 +22,15 @@ trainer_cfg:
   name: base_trainer
 
 model_cfg:
-  name: test_resnet
+  name: medical_net
   kwargs:
-    weights: null
+    pretrain: True
+    weights_path: C:\Users\thendriks\code\git_repositories\base_project\models\weights\resnet_10_23dataset.pth
+    input_shape: [128, 256, 256]
+    n_classes: 1
 
 loss_cfg:
-  name: ce_logits
+  name: bce_logits
 
 optimizer_cfg:
   name: adam

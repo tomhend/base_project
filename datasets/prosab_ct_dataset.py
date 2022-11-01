@@ -3,7 +3,7 @@ import SimpleITK as sitk
 import pandas as pd
 from torch.utils.data import Dataset
 from pathlib import Path
-from custom_transforms import CustomClip, CustomMinMaxNormalize, CustomResize
+from datasets.custom_transforms import CustomClip, CustomMinMaxNormalize, CustomResize
 from torchvision import transforms
 
 class ProsabCTDataset(Dataset):

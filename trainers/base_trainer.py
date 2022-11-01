@@ -4,6 +4,7 @@ The file containing the BaseTrainer class, which runs a basic pytorch training l
 
 import torch
 import numpy as np
+import logging
 from tqdm import tqdm
 from torch.utils.data import DataLoader
 

@@ -6,6 +6,8 @@ to create the dataset.
 from torch.utils.data import Dataset
 from datasets.mock_image_dataset import MockImageDataset
 
+from datasets.prosab_ct_dataset import ProsabCTDataset
+from pathlib import Path
 
 def build_dataset(dataset_name: str, **kwargs: dict[str, any]) -> Dataset:
     """
@@ -37,4 +39,12 @@ def mock_image(**kwargs: dict[str, any]) -> MockImageDataset:
     return MockImageDataset(**kwargs)
 
 
-DATASET_CONSTRUCTORS = {"mock_image": mock_image}
+def prosab_ct(**kwargs) -> ProsabCTDataset:
+    index_file_path = Path(kwargs['index_file_path'])
+    return ProsabCTDataset(index_file_path=index_file_path)
+
+
+DATASET_CONSTRUCTORS = {
+    'mock_image': mock_image,
+    'prosab_ct': prosab_ct
+}
