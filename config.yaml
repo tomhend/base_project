@@ -22,10 +22,10 @@ trainer_cfg:
   name: base_trainer
 
 model_cfg:
-  name: medical_net
+  name: medical_net50
   kwargs:
     pretrain: True
-    weights_path: C:\Users\thendriks\code\git_repositories\base_project\models\weights\resnet_10_23dataset.pth
+    weights_path: C:\Users\thendriks\code\git_repositories\base_project\models\weights\resnet_50_23dataset.pth
     input_shape: [128, 256, 256]
     n_classes: 1
 
@@ -35,13 +35,13 @@ loss_cfg:
 optimizer_cfg:
   name: adam
   kwargs:
-    lr: 0.001
+    lr: 0.00005
 
 session_cfg:
-  epochs: 5
+  epochs: 10
 
 log_cfg:
   wandb_init:
     project: base_project
     job_type: prototype
-  log_fns: ['loss_train_step', 'acc_train_epoch', 'acc_val_epoch', 'loss_val_epoch']
+  log_fns: ['loss_train_step', 'loss_train_epoch', 'loss_val_epoch', 'bi_acc_val_epoch']

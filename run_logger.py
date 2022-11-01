@@ -70,8 +70,25 @@ class RunLogger:
         loss_list = kwargs['losses']
         return {loss_name: np.array(loss_list).mean()}
     
+    def binary_accuracy(self, moment: str, **kwargs):
+        accuracy_name = 'bi_accuracy' + '_' + moment
+        output = kwargs['output']
+        label = kwargs['label']
+        n = len(output)
+        accuracy =  ((output > 0.5) == label).sum()/n
+        
+        return {accuracy_name: accuracy.item()}
+    
+    @register_function('bi_acc_train_epoch', LOG_FUNCTIONS)
+    @register_function('bi_acc_val_epoch', LOG_FUNCTIONS)
+    def epoch_binary_accuracy(self, moment: str, **kwargs):
+        outputs = torch.cat(kwargs['outputs'])
+        labels = torch.cat(kwargs['labels'])
+        
+        return self.binary_accuracy(moment, output=outputs, label=labels)
+    
     def mc_accuracy(self, moment: str, **kwargs):
-        accuracy_name = 'accuracy' + '_' + moment
+        accuracy_name = 'mc_accuracy' + '_' + moment
         output = kwargs['output']
         label = kwargs['label']
         n = len(output)
@@ -79,8 +96,8 @@ class RunLogger:
         
         return {accuracy_name: accuracy.item()}
     
-    @register_function('acc_train_epoch', LOG_FUNCTIONS)
-    @register_function('acc_val_epoch', LOG_FUNCTIONS)
+    @register_function('mc_acc_train_epoch', LOG_FUNCTIONS)
+    @register_function('mc_acc_val_epoch', LOG_FUNCTIONS)
     def epoch_mc_accuracy(self, moment: str, **kwargs):
         outputs = torch.cat(kwargs['outputs'])
         labels = torch.cat(kwargs['labels'])
