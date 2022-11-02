@@ -12,7 +12,7 @@ class RunLogger:
         self.selected_log_functions = self.select_log_functions(log_cfg['log_fns'])
     
     def log_train_step(self, **kwargs) -> None:
-        log_dict = {'train_step': kwargs['step']}
+        log_dict = {}
         for name, function in self.selected_log_functions.items():
             if 'train_step' in name:
                 log_dict.update(function(self, 'train_step', **kwargs))
@@ -20,7 +20,7 @@ class RunLogger:
         wandb.log(log_dict)
     
     def log_train_epoch(self, **kwargs) -> None:
-        log_dict = {'epoch': kwargs['epoch']}
+        log_dict = {}
         for name, function in self.selected_log_functions.items():
             if 'train_epoch' in name:
                 log_dict.update(function(self, 'train_epoch', **kwargs))
@@ -36,7 +36,7 @@ class RunLogger:
         wandb.log(log_dict)
 
     def log_val_epoch(self, **kwargs) -> None:
-        log_dict = {'epoch': kwargs['epoch']}
+        log_dict = {}
         for name, function in self.selected_log_functions.items():
             if 'val_epoch' in name:
                 log_dict.update(function(self, 'val_epoch', **kwargs))
@@ -70,23 +70,25 @@ class RunLogger:
         loss_list = kwargs['losses']
         return {loss_name: np.array(loss_list).mean()}
     
-    def mc_accuracy(self, moment: str, **kwargs):
-        accuracy_name = 'accuracy' + '_' + moment
-        output = kwargs['output']
-        label = kwargs['label']
-        n = len(output)
-        accuracy =  (output.argmax() == label.argmax()).sum()/n
-        
-        return {accuracy_name: accuracy.item()}
-    
     @register_function('acc_train_epoch', LOG_FUNCTIONS)
     @register_function('acc_val_epoch', LOG_FUNCTIONS)
-    def epoch_mc_accuracy(self, moment: str, **kwargs):
-        outputs = torch.cat(kwargs['outputs'])
-        labels = torch.cat(kwargs['labels'])
+    def accuracy(self, moment: str, **kwargs):
+        # Check if the output and label is a single tensor or a list of tensors
+        # If it's a list, comebine them into a single tensor
+        output = torch.cat(kwargs['outputs']) if kwargs.get('outputs', None) else kwargs['output'] 
+        label = torch.cat(kwargs['labels']) if kwargs.get('labels', None) else kwargs['output']
+
+        accuracy_name = 'accuracy' + '_' + moment
+        n = len(output)
         
-        return self.mc_accuracy(moment, output=outputs, label=labels)
-            
+        if output[0].dim() > 0:
+            # if multi-class output use this:
+            accuracy =  (output.argmax() == label.argmax()).sum()/n
+        else:
+            # if single-class output use this:
+            accuracy =  ((output > 0.5) == label).sum()/n
+        
+        return {accuracy_name: accuracy.item()}
     
     
             
