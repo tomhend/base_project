@@ -39,7 +39,7 @@ optimizer_cfg:
     lr: 0.001
 
 session_cfg:
-  epochs: 5
+  epochs: 2
 
 log_cfg:
   wandb_init:

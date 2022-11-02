@@ -22,7 +22,9 @@ class BaseTrainer:
         outputs = []
         losses = []
         
-        for _input, label in tqdm(dataloader):
+        for i, (_input, label) in enumerate(tqdm(dataloader)):
+            step = epoch*len(dataloader) + i
+            
             _input = _input.to(self.device)
             label = label.to(self.device)
             self.optimizer.zero_grad()
@@ -34,7 +36,7 @@ class BaseTrainer:
             self.optimizer.step()
             
             if self.run_logger:
-                self.run_logger.log_train_step(_input=_input, label=label, output=output, loss=loss.item())
+                self.run_logger.log_train_step(_input=_input, label=label, output=output, loss=loss.item(), step=step)
                 
                 _inputs.append(_input)
                 labels.append(label)
@@ -42,7 +44,7 @@ class BaseTrainer:
                 losses.append(loss.item())
         
         if self.run_logger:
-            self.run_logger.log_train_epoch(_inputs=_inputs, labels=labels, outputs=outputs, losses=losses)
+            self.run_logger.log_train_epoch(_inputs=_inputs, labels=labels, outputs=outputs, losses=losses, epoch=epoch)
     
     def val_epoch(self, dataloader: DataLoader, epoch: int) -> None:
         self.model.eval()
@@ -68,5 +70,5 @@ class BaseTrainer:
                     losses.append(loss.item())
                 
             if self.run_logger:
-                self.run_logger.log_val_epoch(_inputs=_inputs, labels=labels, outputs=outputs, losses=losses)
+                self.run_logger.log_val_epoch(_inputs=_inputs, labels=labels, outputs=outputs, losses=losses, epoch=epoch)
             
