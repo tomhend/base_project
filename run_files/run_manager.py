@@ -1,5 +1,6 @@
 from builders import dataset_builder, model_builder, trainer_builder, optimizer_builder, loss_builder
-from run_logger import RunLogger
+from run_files.run_logger import RunLogger
+from run_files.metrics import Metrics
 from typing import Tuple
 from torch.utils.data import DataLoader
 import torch
@@ -28,9 +29,12 @@ class RunManager:
         
         self.epochs = cfg['session_cfg']['epochs']
         
+        self.metrics = Metrics(cfg['session_cfg']['metrics'])
         self.logger = RunLogger(cfg) if 'log_cfg' in cfg.keys() else None
-        if self.logger:
+        
+        if self.metrics:
             self.trainer.set_run_logger(self.logger)
+            self.trainer.set_run_metrics(self.metrics)
         
     
     def start_training(self) -> None:
