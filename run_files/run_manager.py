@@ -5,6 +5,7 @@ from typing import Tuple
 from torch.utils.data import DataLoader
 import torch
 import logging
+import wandb
 
 class RunManager:
     def __init__(self, cfg: dict) -> None:
@@ -24,25 +25,34 @@ class RunManager:
         self.device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
         logging.info(f'Running on {self.device}')
         
+        # Ensure that loss_train_epoch and loss_val_epoch are in the metric list
+        metric_list = list(set(['loss_train_epoch', 'loss_val_epoch'] + cfg['session_cfg'].get('metrics', [])))
+        self.metrics = Metrics(metric_list)
+        self.selection_metric = cfg['session_cfg'].get('selection_metric', 'loss_val_epoch')
+        
         trainer_cfg = cfg['trainer_cfg']
-        self.trainer = trainer_builder.build_trainer(trainer_cfg['name'], self.model, self.loss_fn, self.optimizer, self.device, **trainer_cfg.get('kwargs', {}))
+        self.trainer = trainer_builder.build_trainer(trainer_cfg['name'], self.model, self.loss_fn, self.optimizer, self.device, self.metrics, **trainer_cfg.get('kwargs', {}))
         
         self.epochs = cfg['session_cfg']['epochs']
         
-        self.metrics = Metrics(cfg['session_cfg']['metrics'])
-        self.logger = RunLogger(cfg) if 'log_cfg' in cfg.keys() else None
-        
-        if self.metrics:
+        if 'log_cfg' in cfg.keys():
+            self.logger = RunLogger(cfg)
             self.trainer.set_run_logger(self.logger)
-            self.trainer.set_run_metrics(self.metrics)
         
     
     def start_training(self) -> None:
         for i in range(self.epochs):
             logging.info(f'starting training epoch {i}')
-            self.trainer.train_epoch(self.train_dataloader, i)
+            metrics_dict = self.trainer.train_epoch(self.train_dataloader, i)
             logging.info(f'starting validation epoch {i}')
-            self.trainer.val_epoch(self.val_dataloader, i)
+            validation_metrics_dict = self.trainer.val_epoch(self.val_dataloader, i)
+            
+            metrics_dict.update(validation_metrics_dict)
+            # TODO: decide if this is the best way to do model selection (problem: rounding errors?)
+            if metrics_dict[self.selection_metric] == self.metrics.get_best(self.selection_metric):
+                logging.info(f'Best value for {self.selection_metric}, {metrics_dict[self.selection_metric]}')
+                model_name = wandb.run.name if self.logger else f'{self.cfg["model_cfg"]["name"]}_best'
+                torch.save(self.model.state_dict(), f'models/saved_models/trained_models/{model_name}.pt')
             
     
     @staticmethod

@@ -1,4 +1,4 @@
-from typing import Callable
+from typing import Callable, Union
 import torch
 import numpy as np
 
@@ -7,7 +7,7 @@ class Metrics:
     
     def __init__(self, name_list: list[str]) -> None:
         self.selected_metrics = self.select_metrics(name_list)
-    
+        self.best_metrics = {}
     
     def select_metrics(self, name_list: list[str]) -> dict[str, Callable]:
         try:
@@ -25,25 +25,39 @@ class Metrics:
         
         return metrics_dict
     
-    
     def register_function(name: str, func_dict: dict):
         def decorate(fnc: Callable):
             func_dict[name] = fnc
             return fnc
         return decorate
     
+    def update_best(self, name: str, value: str, higher: bool = False) -> bool:
+        if name in self.best_metrics.keys():
+            if value > self.best_metrics[name]:
+                if higher:
+                    self.best_metrics[name] = value
+                    return True
+                return False
+            if higher:
+                return False
+            self.best_metrics[name] = value
+            return True
+        self.best_metrics[name] = value
+        return True
+    
+    def get_best(self, name: str) -> Union[float, int]:
+        return self.best_metrics[name]
+    
     @register_function('loss_train_step', METRIC_FUNCTIONS)        
-    @register_function('loss_val_step', METRIC_FUNCTIONS)     
+    @register_function('loss_val_step', METRIC_FUNCTIONS)    
+    @register_function('loss_train_epoch', METRIC_FUNCTIONS)
+    @register_function('loss_val_epoch', METRIC_FUNCTIONS)   
     def loss(self, moment: str, **kwargs):
         loss_name = 'loss' + '_' + moment
-        return {loss_name: kwargs['loss']}
-    
-    @register_function('loss_train_epoch', METRIC_FUNCTIONS)
-    @register_function('loss_val_epoch', METRIC_FUNCTIONS)    
-    def avg_loss(self, moment: str, **kwargs):
-        loss_name = 'avg_loss' + '_' + moment
-        loss_list = kwargs['losses']
-        return {loss_name: np.array(loss_list).mean()}
+        loss_value = kwargs['loss']
+        self.update_best(loss_name, loss_value)
+        
+        return {loss_name: loss_value}
     
     @register_function('acc_train_epoch', METRIC_FUNCTIONS)
     @register_function('acc_val_epoch', METRIC_FUNCTIONS)
@@ -62,5 +76,7 @@ class Metrics:
         else:
             # if single-class output use this:
             accuracy =  ((output > 0.5) == label).sum()/n
+        
+        self.update_best(accuracy_name, accuracy, True)
         
         return {accuracy_name: accuracy.item()}

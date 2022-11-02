@@ -5,7 +5,7 @@ wandb_try_out.ipynb
 # Ignore data folders
 data/*
 models/test_models/MedicalNet_pytorch_files2
-
+models/saved_models/*
 # Ignore logs
 lightning_logs/*
 
