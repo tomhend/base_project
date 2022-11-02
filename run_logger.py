@@ -12,7 +12,7 @@ class RunLogger:
         self.selected_log_functions = self.select_log_functions(log_cfg['log_fns'])
     
     def log_train_step(self, **kwargs) -> None:
-        log_dict = {}
+        log_dict = {'train_step': kwargs['step']}
         for name, function in self.selected_log_functions.items():
             if 'train_step' in name:
                 log_dict.update(function(self, 'train_step', **kwargs))
@@ -20,7 +20,7 @@ class RunLogger:
         wandb.log(log_dict)
     
     def log_train_epoch(self, **kwargs) -> None:
-        log_dict = {}
+        log_dict = {'epoch': kwargs['epoch']}
         for name, function in self.selected_log_functions.items():
             if 'train_epoch' in name:
                 log_dict.update(function(self, 'train_epoch', **kwargs))
@@ -36,7 +36,7 @@ class RunLogger:
         wandb.log(log_dict)
 
     def log_val_epoch(self, **kwargs) -> None:
-        log_dict = {}
+        log_dict = {'epoch': kwargs['epoch']}
         for name, function in self.selected_log_functions.items():
             if 'val_epoch' in name:
                 log_dict.update(function(self, 'val_epoch', **kwargs))
