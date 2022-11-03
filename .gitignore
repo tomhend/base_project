@@ -6,15 +6,12 @@ code_scraps.ipynb
 # Ignore data folders
 data/*
 models/test_models/MedicalNet_pytorch_files2
-<<<<<<< HEAD
 input_files/*
 models/weights/*
-=======
 models/saved_models/*
 models/weights/*
 input_files/*
 
->>>>>>> main
 # Ignore logs
 lightning_logs/*
 
