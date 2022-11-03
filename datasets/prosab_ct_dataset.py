@@ -6,18 +6,21 @@ from pathlib import Path
 from datasets.custom_transforms import CustomClip, CustomMinMaxNormalize, CustomResize
 from torchvision import transforms
 
+
 class ProsabCTDataset(Dataset):
     def __init__(self, index_file_path: Path) -> None:
         super().__init__()
 
         self.index_df = pd.read_csv(index_file_path)
-        self._transforms = transforms.Compose([
-                            CustomResize((1/32, 0.25, 0.25)),
-                            CustomClip(-100, 300),
-                            CustomMinMaxNormalize(-100, 500)
-                        ])
+        self._transforms = transforms.Compose(
+            [
+                CustomResize((1 / 32, 0.25, 0.25)),
+                CustomClip(-100, 300),
+                CustomMinMaxNormalize(-100, 500),
+            ]
+        )
         # TODO: create builder for transforms to allow selection from cfg file
-        
+
     def __len__(self) -> int:
         return len(self.index_df)
 

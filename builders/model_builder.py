@@ -43,12 +43,14 @@ def medical_net10(**kwargs) -> MedicalNet10:
     model = MedicalNet10(**kwargs)
     return model
 
+
 def medical_net50(**kwargs) -> MedicalNet50:
     model = MedicalNet50(**kwargs)
     return model
 
+
 MODEL_CONSTRUCTORS = {
-    'test_resnet': test_resnet,
-    'medical_net10': medical_net10,
-    'medical_net50': medical_net50
+    "test_resnet": test_resnet,
+    "medical_net10": medical_net10,
+    "medical_net50": medical_net50,
 }
