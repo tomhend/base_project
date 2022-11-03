@@ -1,0 +1,14 @@
+program: main.py
+method: grid
+metric:
+  name: loss_val_epoch
+  goal: minimize
+parameters:
+  optimizer_cfg:
+    parameters:
+      name:
+        value: 'adam'
+      kwargs:
+        parameters:
+          lr:
+            values: [0.01, 0.001, 0.0001]

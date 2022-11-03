@@ -8,9 +8,11 @@ def build_model(model_name: str, **kwargs) -> torch.nn.Module:
     model = MODEL_CONSTRUCTORS[model_name](**kwargs)
     return model
 
+
 def test_resnet(**kwargs) -> torch.nn.Module:
     model = torchvision.models.resnet18(**kwargs)
     return model
+<<<<<<< HEAD
 
 def medical_net10(**kwargs) -> MedicalNet10:
     model = MedicalNet10(**kwargs)
@@ -25,3 +27,8 @@ MODEL_CONSTRUCTORS = {
     'medical_net10': medical_net10,
     'medical_net50': medical_net50
 }
+=======
+
+
+MODEL_CONSTRUCTORS = {"test_resnet": test_resnet}
+>>>>>>> main
