@@ -40,11 +40,8 @@ def mock_image(**kwargs: dict[str, any]) -> MockImageDataset:
 
 
 def prosab_ct(**kwargs) -> ProsabCTDataset:
-    index_file_path = Path(kwargs['index_file_path'])
+    index_file_path = Path(kwargs["index_file_path"])
     return ProsabCTDataset(index_file_path=index_file_path)
 
 
-DATASET_CONSTRUCTORS = {
-    'mock_image': mock_image,
-    'prosab_ct': prosab_ct
-}
+DATASET_CONSTRUCTORS = {"mock_image": mock_image, "prosab_ct": prosab_ct}
