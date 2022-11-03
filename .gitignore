@@ -6,6 +6,9 @@ wandb_try_out.ipynb
 data/*
 models/test_models/MedicalNet_pytorch_files2
 models/saved_models/*
+models/weights/*
+input_files/*
+
 # Ignore logs
 lightning_logs/*
 

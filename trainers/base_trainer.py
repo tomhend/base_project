@@ -6,12 +6,6 @@ from run_files.run_logger import RunLogger
 from run_files.metrics import Metrics
 
 
-HIGHER_IS_BETTER = {
-    'accuracy': True,
-    'loss': False
-}
-
-
 class BaseTrainer:
     def __init__(self, model: torch.nn.Module, loss_fn: torch.nn.modules.loss._Loss, optimizer: torch.optim.Optimizer, device: str, metrics: Metrics) -> None:
         self.model = model.to(device)
