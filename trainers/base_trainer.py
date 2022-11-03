@@ -7,7 +7,14 @@ from run_files.metrics import Metrics
 
 
 class BaseTrainer:
-    def __init__(self, model: torch.nn.Module, loss_fn: torch.nn.modules.loss._Loss, optimizer: torch.optim.Optimizer, device: str, metrics: Metrics) -> None:
+    def __init__(
+        self,
+        model: torch.nn.Module,
+        loss_fn: torch.nn.modules.loss._Loss,
+        optimizer: torch.optim.Optimizer,
+        device: str,
+        metrics: Metrics,
+    ) -> None:
         self.model = model.to(device)
         self.optimizer = optimizer
         self.loss_fn = loss_fn
@@ -22,7 +29,7 @@ class BaseTrainer:
     def set_run_metrics(self, metrics: Metrics) -> None:
         self.metrics = metrics
 
-    def train_epoch(self,  dataloader: DataLoader, epoch: int) -> None:
+    def train_epoch(self, dataloader: DataLoader, epoch: int) -> None:
         self.model.train()
 
         _inputs = []
@@ -31,7 +38,7 @@ class BaseTrainer:
         losses = []
 
         for i, (_input, label) in enumerate(tqdm(dataloader)):
-            step = epoch*len(dataloader) + i
+            step = epoch * len(dataloader) + i
 
             _input = _input.to(self.device)
             label = label.to(self.device)
@@ -44,8 +51,13 @@ class BaseTrainer:
             self.optimizer.step()
 
             step_metrics = self.metrics.calculate_metrics(
-                moment='train_step', _input=_input, label=label, output=output, loss=loss.item())
-            step_metrics.update({'train_step': step})
+                moment="train_step",
+                _input=_input,
+                label=label,
+                output=output,
+                loss=loss.item(),
+            )
+            step_metrics.update({"train_step": step})
 
             _inputs.append(_input)
             labels.append(label)
@@ -57,8 +69,13 @@ class BaseTrainer:
 
         epoch_loss = np.array(losses).mean()
         epoch_metrics = self.metrics.calculate_metrics(
-            moment='train_epoch', _inputs=_inputs, labels=labels, outputs=outputs, loss=epoch_loss)
-        epoch_metrics.update({'epoch': epoch})
+            moment="train_epoch",
+            _inputs=_inputs,
+            labels=labels,
+            outputs=outputs,
+            loss=epoch_loss,
+        )
+        epoch_metrics.update({"epoch": epoch})
 
         if self.run_logger:
             self.run_logger.log_metrics(epoch_metrics)
@@ -82,7 +99,12 @@ class BaseTrainer:
                 loss = self.loss_fn(output, label)
 
                 step_metrics = self.metrics.calculate_metrics(
-                    moment='val_step', _input=_input, label=label, output=output, loss=loss.item())
+                    moment="val_step",
+                    _input=_input,
+                    label=label,
+                    output=output,
+                    loss=loss.item(),
+                )
 
                 _inputs.append(_input)
                 labels.append(label)
@@ -94,8 +116,13 @@ class BaseTrainer:
 
             epoch_loss = np.array(losses).mean()
             epoch_metrics = self.metrics.calculate_metrics(
-                moment='val_epoch', _inputs=_inputs, labels=labels, outputs=outputs, loss=epoch_loss)
-            epoch_metrics.update({'epoch': epoch})
+                moment="val_epoch",
+                _inputs=_inputs,
+                labels=labels,
+                outputs=outputs,
+                loss=epoch_loss,
+            )
+            epoch_metrics.update({"epoch": epoch})
 
             if self.run_logger:
                 self.run_logger.log_metrics(epoch_metrics)

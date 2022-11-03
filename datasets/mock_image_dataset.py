@@ -6,8 +6,13 @@ from torch.utils.data import Dataset
 
 
 class MockImageDataset(Dataset):
-
-    def __init__(self, size: int, image_size: list[int], classes: int, _transforms: torchvision.transforms = None) -> None:
+    def __init__(
+        self,
+        size: int,
+        image_size: list[int],
+        classes: int,
+        _transforms: torchvision.transforms = None,
+    ) -> None:
         super().__init__()
 
         self.size = size

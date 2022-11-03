@@ -12,6 +12,4 @@ def test_resnet(**kwargs) -> torch.nn.Module:
     return model
 
 
-MODEL_CONSTRUCTORS = {
-    'test_resnet': test_resnet
-}
+MODEL_CONSTRUCTORS = {"test_resnet": test_resnet}

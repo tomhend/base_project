@@ -11,6 +11,4 @@ def mock_image(**kwargs) -> MockImageDataset:
     return MockImageDataset(**kwargs)
 
 
-DATASET_CONSTRUCTORS = {
-    'mock_image': mock_image
-}
+DATASET_CONSTRUCTORS = {"mock_image": mock_image}

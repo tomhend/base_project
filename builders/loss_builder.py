@@ -16,7 +16,4 @@ def ce_logits(**kwargs) -> torch.nn.CrossEntropyLoss:
     return loss_fn
 
 
-LOSS_CONSTRUCTORS = {
-    'bce_logits': bce_logits,
-    'ce_logits': ce_logits
-}
+LOSS_CONSTRUCTORS = {"bce_logits": bce_logits, "ce_logits": ce_logits}

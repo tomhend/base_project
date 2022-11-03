@@ -6,6 +6,7 @@ def register_function(name: str, func_dict: dict):
     def decorate(fnc: Callable):
         func_dict[name] = fnc
         return fnc
+
     return decorate
 
 
@@ -18,10 +19,13 @@ class Metrics:
 
     def select_metrics(self, name_list: list[str]) -> dict[str, Callable]:
         try:
-            return {function_name: self.METRIC_FUNCTIONS[function_name] for function_name in name_list}
+            return {
+                function_name: self.METRIC_FUNCTIONS[function_name]
+                for function_name in name_list
+            }
         except KeyError:
-            print('Metric not found, available metrics:')
-            print('\n'.join(self.METRIC_FUNCTIONS.keys()))
+            print("Metric not found, available metrics:")
+            print("\n".join(self.METRIC_FUNCTIONS.keys()))
             raise
 
     def calculate_metrics(self, moment: str, **kwargs):
@@ -32,34 +36,40 @@ class Metrics:
 
         return metrics_dict
 
-    @register_function('loss_train_step', METRIC_FUNCTIONS)
-    @register_function('loss_val_step', METRIC_FUNCTIONS)
-    @register_function('loss_train_epoch', METRIC_FUNCTIONS)
-    @register_function('loss_val_epoch', METRIC_FUNCTIONS)
+    @register_function("loss_train_step", METRIC_FUNCTIONS)
+    @register_function("loss_val_step", METRIC_FUNCTIONS)
+    @register_function("loss_train_epoch", METRIC_FUNCTIONS)
+    @register_function("loss_val_epoch", METRIC_FUNCTIONS)
     def loss(self, moment: str, **kwargs):
-        loss_name = 'loss' + '_' + moment
-        loss_value = kwargs['loss']
+        loss_name = "loss" + "_" + moment
+        loss_value = kwargs["loss"]
 
         return {loss_name: loss_value}
 
-    @register_function('acc_train_epoch', METRIC_FUNCTIONS)
-    @register_function('acc_val_epoch', METRIC_FUNCTIONS)
+    @register_function("acc_train_epoch", METRIC_FUNCTIONS)
+    @register_function("acc_val_epoch", METRIC_FUNCTIONS)
     def accuracy(self, moment: str, **kwargs):
         # Check if the output and label is a single tensor or a list of tensors
         # If it's a list, comebine them into a single tensor
-        output = torch.cat(kwargs['outputs']) if kwargs.get(
-            'outputs', None) else kwargs['output']
-        label = torch.cat(kwargs['labels']) if kwargs.get(
-            'labels', None) else kwargs['output']
+        output = (
+            torch.cat(kwargs["outputs"])
+            if kwargs.get("outputs", None)
+            else kwargs["output"]
+        )
+        label = (
+            torch.cat(kwargs["labels"])
+            if kwargs.get("labels", None)
+            else kwargs["output"]
+        )
 
-        accuracy_name = 'accuracy' + '_' + moment
+        accuracy_name = "accuracy" + "_" + moment
         n = len(output)
 
         if output[0].dim() > 0:
             # if multi-class output use this:
-            accuracy = (output.argmax() == label.argmax()).sum()/n
+            accuracy = (output.argmax() == label.argmax()).sum() / n
         else:
             # if single-class output use this:
-            accuracy = ((output > 0.5) == label).sum()/n
+            accuracy = ((output > 0.5) == label).sum() / n
 
         return {accuracy_name: accuracy.item()}
