@@ -1,7 +1,11 @@
-from typing import Callable, Union
 import torch
-import numpy as np
+from typing import Callable
 
+def register_function(name: str, func_dict: dict):
+    def decorate(fnc: Callable):
+        func_dict[name] = fnc
+        return fnc
+    return decorate
 class Metrics:
     METRIC_FUNCTIONS = {}
     
@@ -12,7 +16,7 @@ class Metrics:
     def select_metrics(self, name_list: list[str]) -> dict[str, Callable]:
         try:
             return {function_name: self.METRIC_FUNCTIONS[function_name] for function_name in name_list}
-        except KeyError as e:
+        except KeyError:
             print('Metric not found, available metrics:')
             print('\n'.join(self.METRIC_FUNCTIONS.keys()))
             raise
@@ -25,29 +29,6 @@ class Metrics:
         
         return metrics_dict
     
-    def register_function(name: str, func_dict: dict):
-        def decorate(fnc: Callable):
-            func_dict[name] = fnc
-            return fnc
-        return decorate
-    
-    def update_best(self, name: str, value: str, higher: bool = False) -> bool:
-        if name in self.best_metrics.keys():
-            if value > self.best_metrics[name]:
-                if higher:
-                    self.best_metrics[name] = value
-                    return True
-                return False
-            if higher:
-                return False
-            self.best_metrics[name] = value
-            return True
-        self.best_metrics[name] = value
-        return True
-    
-    def get_best(self, name: str) -> Union[float, int]:
-        return self.best_metrics[name]
-    
     @register_function('loss_train_step', METRIC_FUNCTIONS)        
     @register_function('loss_val_step', METRIC_FUNCTIONS)    
     @register_function('loss_train_epoch', METRIC_FUNCTIONS)
@@ -55,7 +36,6 @@ class Metrics:
     def loss(self, moment: str, **kwargs):
         loss_name = 'loss' + '_' + moment
         loss_value = kwargs['loss']
-        self.update_best(loss_name, loss_value)
         
         return {loss_name: loss_value}
     
@@ -76,7 +56,5 @@ class Metrics:
         else:
             # if single-class output use this:
             accuracy =  ((output > 0.5) == label).sum()/n
-        
-        self.update_best(accuracy_name, accuracy, True)
-        
+                
         return {accuracy_name: accuracy.item()}
