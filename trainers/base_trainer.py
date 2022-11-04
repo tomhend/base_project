@@ -1,12 +1,29 @@
+"""
+The file containing the BaseTrainer class, which runs a basic pytorch training loop.
+"""
+
 import torch
 import numpy as np
 from tqdm import tqdm
 from torch.utils.data import DataLoader
+
 from run_files.run_logger import RunLogger
 from run_files.metrics import Metrics
 
 
 class BaseTrainer:
+    """
+    Class that handles the training loop and optionally sends information to the logger.
+
+    Attributes:
+        model (nn.Module): the pytorch model that will be trained
+        optimizer (torch.optim.Optimizer): optimizer that will be used
+        loss_fn (torch.nn.modules.loss._Loss): loss function that will be used
+        device (str): name of the device to train on
+        metrics (Metrics): instance of Metrics that handles the metric calculation
+        run_logger (RunLogger, optional): the logger that handles the logging of training
+            and validation info
+    """
     def __init__(
         self,
         model: torch.nn.Module,
@@ -15,21 +32,43 @@ class BaseTrainer:
         device: str,
         metrics: Metrics,
     ) -> None:
+        """
+        Initializes an instance of BaseTrainer.
+
+        Args:
+            model (torch.nn.Module): _description_
+            loss_fn (torch.nn.modules.loss._Loss): _description_
+            optimizer (torch.optim.Optimizer): _description_
+            device (str): _description_
+            metrics (Metrics): _description_
+        """
         self.model = model.to(device)
         self.optimizer = optimizer
         self.loss_fn = loss_fn
         self.device = device
         self.metrics = metrics
-        self.selection_metric = None
         self.run_logger = None
 
     def set_run_logger(self, run_logger: RunLogger) -> None:
+        """
+        Sets the run_logger.
+
+        Args:
+            run_logger (RunLogger): the RunLogger instance to use
+        """
         self.run_logger = run_logger
 
-    def set_run_metrics(self, metrics: Metrics) -> None:
-        self.metrics = metrics
+    def train_epoch(self, dataloader: DataLoader, epoch: int) -> dict[str, any]:
+        """
+        Runs a training epoch for the model with the given dataloader.
 
-    def train_epoch(self, dataloader: DataLoader, epoch: int) -> None:
+        Args:
+            dataloader (DataLoader): the dataloader containing the model input and labels
+            epoch (int): the epoch number
+
+        Returns:
+            dict[str, any]: the metrics calculated at the end of the epoch
+        """
         self.model.train()
 
         _inputs = []
@@ -82,7 +121,17 @@ class BaseTrainer:
 
         return epoch_metrics
 
-    def val_epoch(self, dataloader: DataLoader, epoch: int) -> None:
+    def val_epoch(self, dataloader: DataLoader, epoch: int) -> dict[str, any]:
+        """
+        Runs a validation epoch for the model with the given dataloader.
+
+        Args:
+            dataloader (DataLoader): the dataloader containing the model input and labels
+            epoch (int): the epoch number
+
+        Returns:
+            dict[str, any]: the metrics calculated at the end of the epoch
+        """
         self.model.eval()
 
         _inputs = []
