@@ -8,6 +8,11 @@ from typing import Tuple
 
 import numpy as np
 import torch
+from torch.utils.data import DataLoader
+import wandb
+
+from run_files.metrics import Metrics
+from run_files.run_logger import RunLogger
 from builders import (
     dataset_builder,
     loss_builder,
@@ -15,19 +20,13 @@ from builders import (
     optimizer_builder,
     trainer_builder,
 )
-from torch.utils.data import DataLoader
-import wandb
-
-from run_files.metrics import Metrics
-from run_files.run_logger import RunLogger
-
 
 class RunManager:
     """
     This class initalizes all components necessary to execute the run, this is done following the
     configuration dictionary passed as an argument to the init function. The config file options and
     necessities are defined in a seperate file TODO: add file name.
-    
+
     Attributes:
         cfg (dict[str, any]): configuration dictionary of the run
         logger (RunLogger, optional): logger that is used

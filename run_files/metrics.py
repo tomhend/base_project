@@ -93,7 +93,7 @@ class Metrics:
         for consistency in the calculation of metrics, and does not do much.
 
         Args:
-            moment (str): string containing the moment to look for in the metric name 
+            moment (str): string containing the moment to look for in the metric name
             loss (float): the loss calculated by the trainer
 
         Returns:
@@ -118,11 +118,11 @@ class Metrics:
         Calculates the accuracy of a classification. For binary classification it uses 0.5 as a
         threshold, for multiclass classification the argmax is used to determine the prediction.
         Either <output and label> or <outputs and labels> should have values.
-        
+
         Args:
-            moment (str): string containing the moment to look for in the metric name 
+            moment (str): string containing the moment to look for in the metric name
             output (torch.Tensor, optional): output tensor of the model. Defaults to None
-            outputs (list[torch.Tensor], optional): list of output tensors of the model. 
+            outputs (list[torch.Tensor], optional): list of output tensors of the model.
                 Defaults to None
             label (torch.Tensor, optional): label tensor. Defaults to None
             labels (list[torch.Tensor], optional): list of label tensors. Defaults to None.
