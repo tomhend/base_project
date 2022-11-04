@@ -1,27 +1,65 @@
-from typing import Tuple
-from torch.utils.data import DataLoader
-import torch
-import logging
-import wandb
-import numpy as np
+"""
+File containing the RunManager class which handles the initaliazation of all components necessary
+for a run and progresses the run.
+"""
 
+import logging
+from typing import Tuple
+
+import numpy as np
+import torch
 from builders import (
     dataset_builder,
-    model_builder,
-    trainer_builder,
-    optimizer_builder,
     loss_builder,
+    model_builder,
+    optimizer_builder,
+    trainer_builder,
 )
-from run_files.run_logger import RunLogger
+from torch.utils.data import DataLoader
+import wandb
+
 from run_files.metrics import Metrics
+from run_files.run_logger import RunLogger
 
 
 class RunManager:
-    def __init__(self, cfg: dict) -> None:
+    """
+    This class initalizes all components necessary to execute the run, this is done following the
+    configuration dictionary passed as an argument to the init function. The config file options and
+    necessities are defined in a seperate file TODO: add file name.
+    
+    Attributes:
+        cfg (dict[str, any]): configuration dictionary of the run
+        logger (RunLogger, optional): logger that is used
+        train_dataloader (DataLoader): dataloader containing the training data
+        val_dataloader (DataLoader): dataloader containing the validation data
+        model (nn.Module): the pytorch model that will be trained
+        optimizer (torch.optim.Optimizer): optimizer that will be used
+        loss_fn (torch.nn.modules.loss._Loss): loss function that will be used
+        device (str): name of the device to train on
+        metrics (Metrics): instance of Metrics that handles the metric calculation
+        selection_metric (str): name of the metric to select the best model on
+        goal (str): string defining if the selection metric should be maximized or minimized
+        trainer (trainers.base_trainer.BaseTrainer): trainer handeling the training of the model
+        epochs (int): the number of epochs to run
+    """
+    def __init__(self, cfg: dict[str, any]) -> None:
+        """
+        Initializes the RunManager given the cfg parameter.
+
+        Args:
+            cfg (dict[str, any]): the configuration dictionary for the run
+        """
+
         self.cfg = cfg
+        self.epochs = self.cfg["session_cfg"]["epochs"]
         self.logger = None
-        if "log_cfg" in cfg.keys():
+
+        # If log_cfg exists, build a logger
+        if "log_cfg" in cfg:
             self.logger = RunLogger(cfg)
+            # When doing wandb sweeps, the configuration is changed and stored in wandb.config
+            # so it should be used in runs instead of cfg
             self.cfg = wandb.config
 
         self.train_dataloader, self.val_dataloader = self._create_dataloaders(self.cfg)
@@ -40,9 +78,10 @@ class RunManager:
         )
 
         self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-        logging.info(f"Running on {self.device}")
+        logging.info("Running on %s", self.device)
 
-        # Ensure that loss_train_epoch and loss_val_epoch are in the metric list
+        # Ensure that loss_train_epoch and loss_val_epoch are in the metric list as these are
+        # required for training
         metric_list = list(
             set(
                 ["loss_train_epoch", "loss_val_epoch"]
@@ -68,17 +107,20 @@ class RunManager:
         if self.logger:
             self.trainer.set_run_logger(self.logger)
 
-        self.epochs = self.cfg["session_cfg"]["epochs"]
-
     def start_training(self) -> None:
+        """
+        Starts the training and keeps running for the number of epochs in self.epochs, this method
+        also handles the logic for saving the best model. NOTE: possibly seperate model saving into
+        another method
+        """
         best_metric_value = np.Inf
         if self.goal == "maximize":
             best_metric_value = -np.Inf
 
         for i in range(self.epochs):
-            logging.info(f"starting training epoch {i}")
+            logging.info("starting training epoch %s", i)
             metrics_dict = self.trainer.train_epoch(self.train_dataloader, i)
-            logging.info(f"starting validation epoch {i}")
+            logging.info("starting validation epoch %s", i)
             validation_metrics_dict = self.trainer.val_epoch(self.val_dataloader, i)
 
             metrics_dict.update(validation_metrics_dict)
@@ -91,7 +133,8 @@ class RunManager:
             if self.goal == "maximize":
                 if metrics_dict[self.selection_metric] > best_metric_value:
                     logging.info(
-                        f"Best value for {self.selection_metric}, {metrics_dict[self.selection_metric]}"
+                        "Best value for %s, %s",
+                        self.selection_metric, metrics_dict[self.selection_metric]
                     )
                     torch.save(
                         self.model.state_dict(),
@@ -101,7 +144,8 @@ class RunManager:
 
             if metrics_dict[self.selection_metric] < best_metric_value:
                 logging.info(
-                    f"Best value for {self.selection_metric}, {metrics_dict[self.selection_metric]}"
+                        "Best value for %s, %s",
+                        self.selection_metric, metrics_dict[self.selection_metric]
                 )
                 torch.save(
                     self.model.state_dict(),
@@ -110,6 +154,15 @@ class RunManager:
 
     @staticmethod
     def _create_dataloaders(cfg: dict) -> Tuple[DataLoader, DataLoader]:
+        """
+        Helper method that creates the dataloaders (as this is quite verbose)
+
+        Args:
+            cfg (dict): configuration file containing the train and validation set configurations
+
+        Returns:
+            Tuple[DataLoader, DataLoader]: the train and validation dataloaders
+        """
         train_dataset_cfg = cfg["train_dataset_cfg"]
         train_dataset = dataset_builder.build_dataset(
             train_dataset_cfg["name"], **train_dataset_cfg["kwargs"]
