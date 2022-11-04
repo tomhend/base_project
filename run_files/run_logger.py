@@ -9,6 +9,7 @@ class RunLogger:
     Class that handles the initialization of wandb and logging of metrics. Currently not very useful
     except for decoupling of the logging.
     """
+
     LOG_FUNCTIONS = {}
 
     def __init__(self, cfg: dict[str, any]) -> None:

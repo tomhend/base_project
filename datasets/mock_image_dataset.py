@@ -49,7 +49,7 @@ class MockImageDataset(Dataset):
         self.image_size = image_size
         self._transforms = _transforms
         self.img_cache = np.zeros((size, *image_size), dtype=np.float32)
-        self.outcomes = np.eye(classes) if classes > 1 else np.array([[0],[1]])
+        self.outcomes = np.eye(classes) if classes > 1 else np.array([[0], [1]])
         self.outcome_cache = {}
 
     def __len__(self) -> int:

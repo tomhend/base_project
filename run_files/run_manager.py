@@ -21,6 +21,7 @@ from builders import (
     trainer_builder,
 )
 
+
 class RunManager:
     """
     This class initalizes all components necessary to execute the run, this is done following the
@@ -42,6 +43,7 @@ class RunManager:
         trainer (trainers.base_trainer.BaseTrainer): trainer handeling the training of the model
         epochs (int): the number of epochs to run
     """
+
     def __init__(self, cfg: dict[str, any]) -> None:
         """
         Initializes the RunManager given the cfg parameter.
@@ -133,7 +135,8 @@ class RunManager:
                 if metrics_dict[self.selection_metric] > best_metric_value:
                     logging.info(
                         "Best value for %s, %s",
-                        self.selection_metric, metrics_dict[self.selection_metric]
+                        self.selection_metric,
+                        metrics_dict[self.selection_metric],
                     )
                     torch.save(
                         self.model.state_dict(),
@@ -143,8 +146,9 @@ class RunManager:
 
             if metrics_dict[self.selection_metric] < best_metric_value:
                 logging.info(
-                        "Best value for %s, %s",
-                        self.selection_metric, metrics_dict[self.selection_metric]
+                    "Best value for %s, %s",
+                    self.selection_metric,
+                    metrics_dict[self.selection_metric],
                 )
                 torch.save(
                     self.model.state_dict(),

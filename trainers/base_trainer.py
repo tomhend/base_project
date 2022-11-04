@@ -24,6 +24,7 @@ class BaseTrainer:
         run_logger (RunLogger, optional): the logger that handles the logging of training
             and validation info
     """
+
     def __init__(
         self,
         model: torch.nn.Module,

@@ -34,6 +34,7 @@ def time_func(func: Callable) -> Callable:
     Returns:
         Callable: the decorated function
     """
+
     @wraps(func)
     def time_wrapper(*args, **kwargs):
         start_time = time.perf_counter()
