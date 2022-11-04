@@ -61,13 +61,13 @@ class MockImageDataset(Dataset):
         """
         return self.size
 
-    def __getitem__(self, index) -> Tuple[torch.Tensor, torch.Tensor]:
+    def __getitem__(self, index: int) -> Tuple[torch.Tensor, torch.Tensor]:
         """
         Returns the image-outcome pair as tensors from cache. If not available, generates a new img,
         or randomly selects an outcome.
 
         Args:
-            index (_type_): the index of the desired dataset entry
+            index (int): the index of the desired dataset entry
 
         Returns:
             Tuple[torch.Tensor, torch.Tensor]: Returns the image-outcome pair as a tuple of tensors

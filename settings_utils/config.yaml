@@ -39,8 +39,8 @@ optimizer_cfg:
     lr: 0.0001
 
 session_cfg:
-  epochs: 1
-  metrics: ['loss_train_step', 'acc_train_epoch', 'acc_val_epoch'] #training and validation loss alway logged on epoch
+  epochs: 2
+  metrics: ['acc_train_epoch', 'acc_val_epoch'] #training and validation loss alway logged on epoch
 # selection metric: loss_val_epoch # NOTE: only epoch based metrics are supported for selection
 # goal: minimize
 
