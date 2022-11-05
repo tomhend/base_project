@@ -72,7 +72,7 @@ class BaseTrainer:
         """
         self.model.train()
 
-        _inputs = []
+        #_inputs = []
         labels = []
         outputs = []
         losses = []
@@ -80,7 +80,7 @@ class BaseTrainer:
         for i, (_input, label) in enumerate(tqdm(dataloader)):
             step = epoch * len(dataloader) + i
 
-            _input = _input.to(self.device)
+            #_input = _input.to(self.device) may cause memory issues with large datasets
             label = label.to(self.device)
             self.optimizer.zero_grad()
 
@@ -92,16 +92,16 @@ class BaseTrainer:
 
             step_metrics = self.metrics.calculate_metrics(
                 moment="train_step",
-                _input=_input,
-                label=label,
-                output=output,
+                #_input=_input.detach(), may cause memory issues with large datasets
+                label=label.detach(),
+                output=output.detach(),
                 loss=loss.item(),
             )
             step_metrics.update({"train_step": step})
 
-            _inputs.append(_input)
-            labels.append(label)
-            outputs.append(output)
+            #_inputs.append(_input) may cause memory issues with large datasets
+            labels.append(label.detach())
+            outputs.append(output.detach())
             losses.append(loss.item())
 
             if self.run_logger:
@@ -110,7 +110,7 @@ class BaseTrainer:
         epoch_loss = np.array(losses).mean()
         epoch_metrics = self.metrics.calculate_metrics(
             moment="train_epoch",
-            _inputs=_inputs,
+            #_inputs=_inputs, may cause memory issues with large datasets
             labels=labels,
             outputs=outputs,
             loss=epoch_loss,
