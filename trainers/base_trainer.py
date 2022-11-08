@@ -41,7 +41,7 @@ class BaseTrainer:
             loss_fn (torch.nn.modules.loss._Loss): loss function to use
             optimizer (torch.optim.Optimizer): the optimizer to use
             device (str): the device to train on
-            metrics (Metrics): the Metric instance to calculat the metrics
+            metrics (Metrics): the Metric instance to calculate the metrics
         """
         self.model = model.to(device)
         self.optimizer = optimizer
