@@ -8,7 +8,7 @@ from tqdm import tqdm
 from torch.utils.data import DataLoader
 
 from run_files.run_logger import RunLogger
-from run_files.metrics import Metrics
+from run_files.metrics import Metrics, Moments
 
 
 class BaseTrainer:
@@ -91,13 +91,13 @@ class BaseTrainer:
             self.optimizer.step()
 
             step_metrics = self.metrics.calculate_metrics(
-                moment="train_step",
+                moment=Moments.TRAIN_STEP,
                 #_input=_input.detach(), may cause memory issues with large datasets
                 label=label.detach(),
                 output=output.detach(),
                 loss=loss.item(),
             )
-            step_metrics.update({"train_step": step})
+            step_metrics.update({Moments.TRAIN_STEP: step})
 
             #_inputs.append(_input) may cause memory issues with large datasets
             labels.append(label.detach())
@@ -109,7 +109,7 @@ class BaseTrainer:
 
         epoch_loss = np.array(losses).mean()
         epoch_metrics = self.metrics.calculate_metrics(
-            moment="train_epoch",
+            moment=Moments.TRAIN_EPOCH,
             #_inputs=_inputs, may cause memory issues with large datasets
             labels=labels,
             outputs=outputs,
@@ -149,7 +149,7 @@ class BaseTrainer:
                 loss = self.loss_fn(output, label)
 
                 step_metrics = self.metrics.calculate_metrics(
-                    moment="val_step",
+                    moment=Moments.VAL_STEP,
                     _input=_input,
                     label=label,
                     output=output,
@@ -166,7 +166,7 @@ class BaseTrainer:
 
             epoch_loss = np.array(losses).mean()
             epoch_metrics = self.metrics.calculate_metrics(
-                moment="val_epoch",
+                moment=Moments.VAL_EPOCH,
                 _inputs=_inputs,
                 labels=labels,
                 outputs=outputs,
