@@ -37,11 +37,11 @@ class BaseTrainer:
         Initializes an instance of BaseTrainer.
 
         Args:
-            model (torch.nn.Module): _description_
-            loss_fn (torch.nn.modules.loss._Loss): _description_
-            optimizer (torch.optim.Optimizer): _description_
-            device (str): _description_
-            metrics (Metrics): _description_
+            model (torch.nn.Module): model to train
+            loss_fn (torch.nn.modules.loss._Loss): loss function to use
+            optimizer (torch.optim.Optimizer): the optimizer to use
+            device (str): the device to train on
+            metrics (Metrics): the Metric instance to calculat the metrics
         """
         self.model = model.to(device)
         self.optimizer = optimizer
