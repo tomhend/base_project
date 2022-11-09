@@ -1,15 +1,15 @@
 Datasets
 ========
 
-.. py:module:: base_project.datasets
+.. py:module:: datasets
 
 Submodules
 ----------
 
-base\_project.datasets.mock\_image\_dataset module
+datasets.mock\_image\_dataset module
 --------------------------------------------------
 
-.. automodule:: base_project.datasets.mock_image_dataset
+.. automodule:: datasets.mock_image_dataset
    :members:
    :undoc-members:
    :show-inheritance:

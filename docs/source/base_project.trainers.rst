@@ -1,15 +1,15 @@
 Trainers
 ========
 
-.. py:module:: base_project.trainers
+.. py:module:: trainers
 
 Submodules
 ----------
 
-base\_project.trainers.base\_trainer module
+trainers.base\_trainer module
 -------------------------------------------
 
-.. automodule:: base_project.trainers.base_trainer
+.. automodule:: trainers.base_trainer
    :members:
    :undoc-members:
    :show-inheritance:
