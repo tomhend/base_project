@@ -1,5 +1,5 @@
-base\_project.datasets namespace
-================================
+Datasets
+========
 
 .. py:module:: base_project.datasets
 

@@ -1,5 +1,5 @@
-base\_project.settings\_utils namespace
-=======================================
+Utils
+=====
 
 .. py:module:: base_project.settings_utils
 

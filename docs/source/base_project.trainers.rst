@@ -1,5 +1,5 @@
-base\_project.trainers namespace
-================================
+Trainers
+========
 
 .. py:module:: base_project.trainers
 

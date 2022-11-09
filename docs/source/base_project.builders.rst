@@ -1,5 +1,5 @@
-base\_project.builders namespace
-================================
+Builders
+========
 
 .. py:module:: base_project.builders
 
