@@ -19,10 +19,10 @@ sphinx:
 # formats:
 #    - pdf
 python:
-   version: "3.9"
-   install:
-      - method: pip
-        path: .
+  version: "3.9"
+  install:
+    - method: pip
+      path: .
 # Optionally declare the Python requirements required to build your docs
 conda:
   environment: environment.yaml
