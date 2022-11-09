@@ -22,7 +22,7 @@ class MockImageDataset(Dataset):
         _transforms (torchvision.transforms.Compose): composition of the transforms
         img_cache (np.array): a cache of the generated images
         outcomes (np.array): when classes = 1, a 2x1 array with 0, 1 as values, else the identity
-            matrix with size = classes
+        matrix with size = classes
         outcome_cache (dict[int, np.array]): a cache of the generated outcomes
     """
 
@@ -41,7 +41,7 @@ class MockImageDataset(Dataset):
             image_size (list[int]): size of the image (channels, height, width)
             classes (int): numbers of classes in outcome
             _transforms (torchvision.transforms.Compose, optional): Transform to apply to the
-                generated image. Defaults to None.
+            generated image. Defaults to None.
         """
         super().__init__()
 

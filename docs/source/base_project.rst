@@ -1,5 +1,5 @@
-base\_project namespace
-=======================
+Base Project
+============
 
 .. py:module:: base_project
 

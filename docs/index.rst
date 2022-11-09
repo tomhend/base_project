@@ -8,9 +8,8 @@ Welcome to base_project's documentation!
 
 .. toctree::
    :maxdepth: 4
-   :caption: Contents:
 
-   base_project
+   source/base_project
 
 
 Indices and tables
