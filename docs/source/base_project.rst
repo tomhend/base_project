@@ -18,10 +18,10 @@ Subpackages
 Submodules
 ----------
 
-base\_project.main module
+main module
 -------------------------
 
-.. automodule:: base_project.main
+.. automodule:: main
    :members:
    :undoc-members:
    :show-inheritance:
