@@ -133,7 +133,7 @@ class Metrics:
             moment (str): string containing the moment to look for in the metric name
             output (torch.Tensor, optional): output tensor of the model. Defaults to None
             outputs (list[torch.Tensor], optional): list of output tensors of the model.
-                Defaults to None
+            Defaults to None
             label (torch.Tensor, optional): label tensor. Defaults to None
             labels (list[torch.Tensor], optional): list of label tensors. Defaults to None.
 

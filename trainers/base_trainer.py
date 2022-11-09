@@ -22,7 +22,7 @@ class BaseTrainer:
         device (str): name of the device to train on
         metrics (Metrics): instance of Metrics that handles the metric calculation
         run_logger (RunLogger, optional): the logger that handles the logging of training
-            and validation info
+        and validation info
     """
 
     def __init__(

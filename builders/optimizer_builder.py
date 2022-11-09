@@ -18,7 +18,7 @@ def build_optimizer(
     Args:
         optimizer_name (str): name of the optimizer, should be in OPTIMIZER_CONSTRUCTORS
         model_parameters (Generator[torch.Tensor, None, None]): the parameters that should be
-            optimized, taken from the model with model.parameters()
+        optimized, taken from the model with model.parameters()
         kwargs (dict[str, any]): the keyword arguments to be passed onto the builder function
 
     Returns:
@@ -34,7 +34,7 @@ def adam(model_parameters, **kwargs) -> torch.optim.Adam:
 
     Args:
         model_parameters (Generator[torch.Tensor, None, None]): the parameters that should be
-            optimized, taken from the model with model.parameters()
+        optimized, taken from the model with model.parameters()
         kwargs(dict[str, any]): see: https://pytorch.org/docs/stable/generated/torch.optim.Adam.html
         for available kwargs
 
