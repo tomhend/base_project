@@ -25,7 +25,7 @@ class ProsabCTDataset(Dataset):
         return len(self.index_df)
 
     def __getitem__(self, index) -> tuple[torch.Tensor, torch.Tensor]:
-        scan_path = self.index_df.loc[index, "scan_paths"]
+        scan_path = self.index_df.loc[index, "nifti_paths"]
         outcome = self.index_df.loc[index, "outcomes"]
         scan_nifti = sitk.ReadImage(str(Path(scan_path)))
         scan_array = sitk.GetArrayFromImage(scan_nifti)
