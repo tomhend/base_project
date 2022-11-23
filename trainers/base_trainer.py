@@ -46,7 +46,7 @@ class BaseTrainer:
         """
         self.model = model.to(device)
         self.optimizer = optimizer
-        self.loss_fn = loss_fn
+        self.loss_fn = loss_fn.to(device)
         self.device = device
         self.metrics = metrics
         self.run_logger = None
@@ -81,7 +81,7 @@ class BaseTrainer:
         for i, (_input, label) in enumerate(tqdm(dataloader)):
             step = epoch * len(dataloader) + i
 
-            #_input = _input.to(self.device) may cause memory issues with large datasets
+            _input = _input.to(self.device)
             label = label.to(self.device)
             self.optimizer.zero_grad()
 

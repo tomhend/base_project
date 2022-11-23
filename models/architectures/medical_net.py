@@ -31,12 +31,14 @@ class MedicalNet10(torch.nn.Module):
             model.load_state_dict(net_dict)
 
         self.medicalnet = nn.Sequential(
-            *list(model.children())[:-1], nn.AdaptiveAvgPool3d((1, 1, 1))
+            *list(model.children())[:-1], nn.ReLU(), nn.AdaptiveAvgPool3d((1, 1, 1))
         )
 
-        # for param in self.medicalnet.parameters():
+        #for param in self.medicalnet.parameters():
         #    param.requires_grad = False
-
+        #for param in list(self.medicalnet.children())[0].parameters():
+        #    param.requires_grad = True
+            
         self.fc1 = nn.Linear(512, 1)
 
     def forward(self, x) -> torch.Tensor:

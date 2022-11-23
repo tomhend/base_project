@@ -63,6 +63,9 @@ class RunManager:
             # so it should be used in runs instead of cfg
             self.cfg = wandb.config
 
+        self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+        logging.info("Running on %s", self.device)
+        
         self.train_dataloader, self.val_dataloader = self._create_dataloaders(self.cfg)
 
         model_cfg = self.cfg["model_cfg"]
@@ -77,9 +80,6 @@ class RunManager:
         self.loss_fn = loss_builder.build_loss_function(
             loss_cfg["name"], **loss_cfg.get("kwargs", {})
         )
-
-        self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-        logging.info("Running on %s", self.device)
 
         # Ensure that loss_train_epoch and loss_val_epoch are in the metric list as these are
         # required for training
@@ -145,6 +145,7 @@ class RunManager:
                 continue
 
             if metrics_dict[self.selection_metric] < best_metric_value:
+                best_metric_value = metrics_dict[self.selection_metric]
                 logging.info(
                     "Best value for %s, %s",
                     self.selection_metric,

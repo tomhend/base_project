@@ -103,6 +103,7 @@ class Metrics:
 
         return {loss_name: loss}
 
+    @register_function("acc_train_step", METRIC_FUNCTIONS)
     @register_function("acc_train_epoch", METRIC_FUNCTIONS)
     @register_function("acc_val_epoch", METRIC_FUNCTIONS)
     def accuracy(
@@ -138,11 +139,13 @@ class Metrics:
         accuracy_name = "accuracy" + "_" + moment
         n_outputs = len(output)
 
-        if output[0].dim() > 0:
+        if output[0].dim() > 1:
             # if multi-class output use this:
             accuracy = (output.argmax() == label.argmax()).sum() / n_outputs
         else:
             # if single-class output use this:
-            accuracy = ((output > 0.5) == label).sum() / n_outputs
+            sig = torch.nn.Sigmoid()
+            sig_output = sig(output)
+            accuracy = ((sig_output > 0.5) == label).sum() / n_outputs
 
         return {accuracy_name: accuracy.item()}
