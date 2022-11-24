@@ -1,4 +1,4 @@
-# base_project
+# WIP: base_project
 ## Goal
 The goal of this package is to write a package that makes it easy to train machine learning
 projects. The aim is to manage as much of the settings of the project in the config.yaml file, to
@@ -45,6 +45,11 @@ best model on with 'selection_metric' (default: 'loss_val_epoch'), and specifiy 
 
 ### log_cfg
 Takes a 'wandb_init' key with as value the kwargs that you want to pass to the wandb.init function.
+
+## Additional programming
+You will probably have to create your own pytorch dataset and add it to the dataset_builder, as well
+as your own model architecture which you should add to the model_builder. If you want more options
+for loss or optimizers you can add those easily as well to their respective builder files.
 
 ## Running
 Once everything is configured in the configuration file, cd to your project folder and install the
