@@ -1,5 +1,6 @@
 # Ignore specific files
 preprocessing.ipynb
+input_file_creation.ipynb
 wandb_try_out.ipynb
 code_scraps.ipynb
 

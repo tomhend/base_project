@@ -3,9 +3,9 @@ train_dataset_cfg:
   kwargs:
     index_file_path: C:\Users\thendriks\code\git_repositories\base_project\input_files\nifti_input_train.csv
 train_dataloader_cfg:
-  batch_size: 12
+  batch_size: 10
   shuffle: True
-  num_workers: 4
+  num_workers: 8
   drop_last: False
 
 val_dataset_cfg:
@@ -15,18 +15,18 @@ val_dataset_cfg:
 val_dataloader_cfg:
   batch_size: 10
   shuffle: False
-  num_workers: 4
+  num_workers: 8
   drop_last: False
 
 trainer_cfg:
   name: base_trainer
 
 model_cfg:
-  name: medical_net10
+  name: medical_net50
   kwargs:
     pretrain: True
-    weights_path: C:\Users\thendriks\code\git_repositories\base_project\models\weights\resnet_10_23dataset.pth
-    input_shape: [34, 256, 256]
+    weights_path: C:\Users\thendriks\code\git_repositories\base_project\models\weights\resnet_50_23dataset.pth
+    input_shape: [40, 256, 256]
     n_classes: 1
 
 loss_cfg:
