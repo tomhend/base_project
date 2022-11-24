@@ -4,7 +4,7 @@ The goal of this package is to write a package that makes it easy to train machi
 projects. The aim is to manage as much of the settings of the project in the config.yaml file, to
 make the project reproducible and easily adaptable. The training process can be logged using Weights
 and Biases, which can be found [here](https://wandb.ai/).
-## Usage
+## Configuration
 The config.yaml file provides an overview of which settings can be utilized.
 ### train_dataset_cfg/val_dataset_cfg
 Requires a name that corresponds with a name in the dictionary found in dataset_builder.py This
@@ -43,10 +43,14 @@ validation loss are logged on every epoch by default. You can also select a metr
 best model on with 'selection_metric' (default: 'loss_val_epoch'), and specifiy the 'goal' as
 'minimize' or 'maximize'.
 
-### log_cfg:
+### log_cfg
 Takes a 'wandb_init' key with as value the kwargs that you want to pass to the wandb.init function.
 
-## Contributing
+## Running
+Once everything is configured in the configuration file, cd to your project folder and install the
+anaconda environment in the environment.yaml file. Then you just have to run 'main.py' from the
+command line to start the training process.
+# Contributing
 Right now there are not so many model architectures available, nor are there many metrics, loss
 functions or optimizers. It is however very easy to implement new ones, just add a function in one
 of the builder classes and register it to the dictionary with a name. Then you can call it from the
