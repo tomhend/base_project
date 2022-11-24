@@ -72,7 +72,7 @@ class BaseTrainer:
         """
         self.model.train()
 
-        #_inputs = []
+        # _inputs = []
         labels = []
         outputs = []
         losses = []
@@ -80,7 +80,7 @@ class BaseTrainer:
         for i, (_input, label) in enumerate(tqdm(dataloader)):
             step = epoch * len(dataloader) + i
 
-            #_input = _input.to(self.device) may cause memory issues with large datasets
+            # _input = _input.to(self.device) may cause memory issues with large datasets
             label = label.to(self.device)
             self.optimizer.zero_grad()
 
@@ -92,14 +92,14 @@ class BaseTrainer:
 
             step_metrics = self.metrics.calculate_metrics(
                 moment=Moments.TRAIN_STEP,
-                #_input=_input.detach(), may cause memory issues with large datasets
+                # _input=_input.detach(), may cause memory issues with large datasets
                 label=label.detach(),
                 output=output.detach(),
                 loss=loss.item(),
             )
             step_metrics.update({Moments.TRAIN_STEP: step})
 
-            #_inputs.append(_input) may cause memory issues with large datasets
+            # _inputs.append(_input) may cause memory issues with large datasets
             labels.append(label.detach())
             outputs.append(output.detach())
             losses.append(loss.item())
@@ -110,7 +110,7 @@ class BaseTrainer:
         epoch_loss = np.array(losses).mean()
         epoch_metrics = self.metrics.calculate_metrics(
             moment=Moments.TRAIN_EPOCH,
-            #_inputs=_inputs, may cause memory issues with large datasets
+            # _inputs=_inputs, may cause memory issues with large datasets
             labels=labels,
             outputs=outputs,
             loss=epoch_loss,

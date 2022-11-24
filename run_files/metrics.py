@@ -10,15 +10,17 @@ above the definition. The name determines when they are calculated, and should i
 from typing import Callable
 import torch
 
+
 class Moments:
     """
     Class that holds the constants for the moments on which functions are run
     """
-    TRAIN_STEP = 'train_step'
-    VAL_STEP = 'val_step'
-    TRAIN_EPOCH = 'train_epoch'
-    VAL_EPOCH = 'val_epoch'
-    
+
+    TRAIN_STEP = "train_step"
+    VAL_STEP = "val_step"
+    TRAIN_EPOCH = "train_epoch"
+    VAL_EPOCH = "val_epoch"
+
 
 def register_function(name: str, moment: str, func_dict: dict):
     """
@@ -31,7 +33,7 @@ def register_function(name: str, moment: str, func_dict: dict):
     """
 
     def decorate(fnc: Callable):
-        func_dict[name+'_'+moment] = fnc
+        func_dict[name + "_" + moment] = fnc
         return fnc
 
     return decorate
