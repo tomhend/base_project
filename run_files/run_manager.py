@@ -65,7 +65,7 @@ class RunManager:
 
         self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
         logging.info("Running on %s", self.device)
-        
+
         self.train_dataloader, self.val_dataloader = self._create_dataloaders(self.cfg)
 
         model_cfg = self.cfg["model_cfg"]

@@ -10,6 +10,7 @@ from models.architectures.medical_net import MedicalNet10, MedicalNet50
 
 from models.architectures import layered_3dconvnet
 
+
 def build_model(model_name: str, **kwargs: dict[str, any]) -> torch.nn.Module:
     """
     Main function for building the model. Uses the model_name to select the correct builder
@@ -40,6 +41,7 @@ def test_resnet(**kwargs: dict[str, any]) -> torch.nn.Module:
     model = torchvision.models.resnet18(**kwargs)
     return model
 
+
 def medical_net10(**kwargs) -> MedicalNet10:
     model = MedicalNet10(**kwargs)
     return model
@@ -53,6 +55,7 @@ def medical_net50(**kwargs) -> MedicalNet50:
 def convnet_3d(**kwargs: dict[str, any]) -> torch.nn.Module:
     model = layered_3dconvnet.ConvNet3D(**kwargs)
     return model
+
 
 MODEL_CONSTRUCTORS = {
     "test_resnet": test_resnet,

@@ -4,6 +4,7 @@ The file containing the BaseTrainer class, which runs a basic pytorch training l
 
 import torch
 import numpy as np
+import pandas as pd
 import logging
 from tqdm import tqdm
 from torch.utils.data import DataLoader
@@ -72,7 +73,8 @@ class BaseTrainer:
             dict[str, any]: the metrics calculated at the end of the epoch
         """
         self.model.train()
-
+        if self.run_logger:
+            wandb.watch(self.model, log='all')
         # _inputs = []
         labels = []
         outputs = []
@@ -177,5 +179,9 @@ class BaseTrainer:
 
             if self.run_logger:
                 self.run_logger.log_metrics(epoch_metrics)
+                input_sample = _inputs[0][0]
+                input_slice = input_sample[:, input_sample.shape[1] // 2 - 5, :, :]
+                self.run_logger.log_image(input_slice)
+                self.run_logger.log_out_label(outputs[0], labels[0])
 
         return epoch_metrics

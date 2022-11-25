@@ -8,6 +8,7 @@ class ConvNetLayer3D(torch.nn.Module):
     A layer used in the ConvNet3d, consists of a convolutional step and optional maxpool and dropout
     steps. Subclasses torch.nn.Module
     """
+
     def __init__(
         self,
         input_size: list[int],
@@ -20,7 +21,7 @@ class ConvNetLayer3D(torch.nn.Module):
     ) -> None:
         """
         Initializes the layer.
-        
+
         Args:
             input_size (list[int]): size of the input
             out_channels (int): number of output channels
@@ -34,7 +35,7 @@ class ConvNetLayer3D(torch.nn.Module):
             Defaults to None.
         """
         super().__init__()
-        
+
         self.convolution = torch.nn.Conv3d(
             in_channels=input_size[0],
             out_channels=out_channels,
@@ -113,10 +114,18 @@ class ConvNet3D(torch.nn.Module):
 
         flat_n = np.prod(input_size)
         flatten = torch.nn.Flatten()
-        classification_head = torch.nn.Linear(flat_n, n_classes)
-        
+        relu = torch.nn.ReLU()
+        classification_head1 = torch.nn.Linear(flat_n, 1024)
+        classification_head2 = torch.nn.Linear(1024, 256)
+        classification_head3 = torch.nn.Linear(256, n_classes)
+
         layers.append(flatten)
-        layers.append(classification_head)
+        layers.append(classification_head1)
+        layers.append(relu)
+        layers.append(classification_head2)
+        layers.append(relu)
+        layers.append(classification_head3)
+
         self.network = torch.nn.Sequential(*layers)
 
     def forward(self, input: torch.Tensor) -> torch.Tensor:

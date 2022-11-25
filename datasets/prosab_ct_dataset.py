@@ -14,9 +14,9 @@ class ProsabCTDataset(Dataset):
         self.index_df = pd.read_csv(index_file_path)
         self._transforms = transforms.Compose(
             [
-                CustomResize((1, 0.5, 0.5)),
-                CustomClip(-100, 500),
-                CustomMinMaxNormalize(-100, 500),
+                CustomResize((1, 0.25, 0.25)),
+                CustomClip(0, 100),
+                CustomMinMaxNormalize(0, 100),
             ]
         )
         # TODO: create builder for transforms to allow selection from cfg file
@@ -32,4 +32,6 @@ class ProsabCTDataset(Dataset):
         if self._transforms:
             scan_array = self._transforms(scan_array)
 
-        return torch.tensor(scan_array, dtype=torch.float).unsqueeze(0), torch.tensor([outcome], dtype=torch.float)
+        return torch.tensor(scan_array, dtype=torch.float).unsqueeze(0), torch.tensor(
+            [outcome], dtype=torch.float
+        )

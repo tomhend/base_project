@@ -9,6 +9,7 @@ from datasets.mock_image_dataset import MockImageDataset
 from datasets.prosab_ct_dataset import ProsabCTDataset
 from pathlib import Path
 
+
 def build_dataset(dataset_name: str, **kwargs: dict[str, any]) -> Dataset:
     """
     Main function for building the dataset. Uses the dataset_name to select the correct builder

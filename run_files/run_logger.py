@@ -2,7 +2,8 @@
 File containing the 'weights and biases'/'wandb' related functions
 """
 import wandb
-
+import pandas as pd
+import torch
 
 class RunLogger:
     """
@@ -22,6 +23,15 @@ class RunLogger:
         log_cfg = cfg["log_cfg"]
         wandb.init(**log_cfg["wandb_init"], config=cfg)
 
+    def watch_model(self, model: torch.nn.Module) -> None:
+        """
+        Logs information about the model to wandb
+
+        Args:
+            model (torch.nn.Module): the model that should be logged
+        """
+        wandb.watch(model, log='all')
+    
     def log_metrics(self, metrics_dict: dict[str, any]) -> None:
         """
         Log metrics to wandb.
@@ -31,3 +41,27 @@ class RunLogger:
                 to log
         """
         wandb.log(metrics_dict)
+
+    def log_image(self, image: torch.Tensor) -> None:
+        """
+        Logs an image to wandb
+
+        Args:
+            image (torch.Tensor): image to log
+        """
+        image = wandb.Image(image, caption="validation_sample")
+        wandb.log({"validation_sample": image})
+
+    def log_out_label(self, outputs: torch.Tensor, labels: torch.Tensor):
+        """
+        Logs outputs and labels to a table in wandb
+
+        Args:
+            outputs (torch.Tensor): outputs to log
+            labels (torch.Tensor): labels to log
+        """
+        out_label_df = pd.DataFrame(
+            zip(outputs.detach().cpu().numpy(), labels.detach().cpu().numpy()),
+            columns=["outputs", "labels"],
+        )
+        wandb.log({'Outputs and labels': out_label_df})

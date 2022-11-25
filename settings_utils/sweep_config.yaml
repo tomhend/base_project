@@ -11,7 +11,7 @@ parameters:
       kwargs:
         parameters:
           lr:
-            values: [0.0001, 0.00001, 0.001]
+            values: [0.0001, 0.001, 0.01]
   
   session_cfg:
     parameters:
