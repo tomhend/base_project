@@ -11,7 +11,7 @@ train_dataloader_cfg:
 val_dataset_cfg:
   name: prosab_ct
   kwargs:
-    index_file_path:.\input_files\nifti_input_val.csv
+    index_file_path: .\input_files\nifti_input_val.csv
 val_dataloader_cfg:
   batch_size: 6
   shuffle: False
