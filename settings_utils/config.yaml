@@ -2,8 +2,8 @@ train_dataset_cfg:
   name: mock_image
   kwargs:
     size: 10
-    image_size: [3,256,256]
-    classes: 1000
+    image_size: [1, 20, 128, 128]
+    classes: 1
 train_dataloader_cfg:
   batch_size: 2
   shuffle: True
@@ -13,9 +13,9 @@ train_dataloader_cfg:
 val_dataset_cfg:
   name: mock_image
   kwargs:
-    size: 2
-    image_size: [3,256,256]
-    classes: 1000
+    size: 10
+    image_size: [1, 20, 128, 128]
+    classes: 1
 val_dataloader_cfg:
   batch_size: 2
   shuffle: False
