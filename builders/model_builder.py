@@ -5,7 +5,7 @@ to create the model.
 
 import torch
 import torchvision
-
+from models.architectures import layered_3dconvnet
 
 def build_model(model_name: str, **kwargs: dict[str, any]) -> torch.nn.Module:
     """
@@ -38,4 +38,9 @@ def test_resnet(**kwargs: dict[str, any]) -> torch.nn.Module:
     return model
 
 
-MODEL_CONSTRUCTORS = {"test_resnet": test_resnet}
+def convnet_3d(**kwargs: dict[str, any]) -> torch.nn.Module:
+    model = layered_3dconvnet.ConvNet3D(**kwargs)
+    return model
+
+
+MODEL_CONSTRUCTORS = {"test_resnet": test_resnet, "convnet_3d": convnet_3d}
