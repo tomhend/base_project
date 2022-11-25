@@ -1,9 +1,9 @@
 train_dataset_cfg:
   name: prosab_ct
   kwargs:
-    index_file_path: C:\Users\thendriks\code\git_repositories\base_project\input_files\nifti_input_train.csv
+    index_file_path: .\input_files\nifti_input_train.csv
 train_dataloader_cfg:
-  batch_size: 10
+  batch_size: 6
   shuffle: True
   num_workers: 8
   drop_last: False
@@ -11,9 +11,9 @@ train_dataloader_cfg:
 val_dataset_cfg:
   name: prosab_ct
   kwargs:
-    index_file_path: C:\Users\thendriks\code\git_repositories\base_project\input_files\nifti_input_val.csv
+    index_file_path:.\input_files\nifti_input_val.csv
 val_dataloader_cfg:
-  batch_size: 10
+  batch_size: 6
   shuffle: False
   num_workers: 8
   drop_last: False
@@ -25,8 +25,8 @@ model_cfg:
   name: medical_net50
   kwargs:
     pretrain: True
-    weights_path: C:\Users\thendriks\code\git_repositories\base_project\models\weights\resnet_50_23dataset.pth
-    input_shape: [40, 256, 256]
+    weights_path: .\models\weights\resnet_50_23dataset.pth
+    input_shape: [20, 128, 128]
     n_classes: 1
 
 loss_cfg:

@@ -43,7 +43,7 @@ class MedicalNet10(torch.nn.Module):
 
     def forward(self, x) -> torch.Tensor:
         mn_out = self.medicalnet(x)
-        out = self.fc1(mn_out.squeeze())
+        out = self.fc1(mn_out.squeeze(1))
         return out
 
 
@@ -85,5 +85,6 @@ class MedicalNet50(torch.nn.Module):
 
     def forward(self, x) -> torch.Tensor:
         mn_out = self.medicalnet(x)
-        out = self.fc1(mn_out.squeeze())
+        out = self.fc1(torch.flatten(mn_out, start_dim=1))
+        
         return out
