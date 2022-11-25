@@ -4,6 +4,10 @@ from typing import Tuple
 
 
 class ConvNetLayer3D(torch.nn.Module):
+    """
+    A layer used in the ConvNet3d, consists of a convolutional step and optional maxpool and dropout
+    steps. Subclasses torch.nn.Module
+    """
     def __init__(
         self,
         input_size: list[int],
@@ -14,6 +18,23 @@ class ConvNetLayer3D(torch.nn.Module):
         maxpool_stride: int = None,
         dropout_chance: float = None,
     ) -> None:
+        """
+        Initializes the layer.
+        
+        Args:
+            input_size (list[int]): size of the input
+            out_channels (int): number of output channels
+            kernel_size (int): size of the convolutional kernel
+            stride (int): stride, should be 1 for now (because of using 'same' padding)
+            maxpool_size (int, optional): if supplied specifies the maxpool kernel size.
+            Defaults to None.
+            maxpool_stride (int, optional): if supplied specifies the maxpool stride.
+            Defaults to None.
+            dropout_chance (float, optional): if supplied specifies the dropout chance.
+            Defaults to None.
+        """
+        super().__init__()
+        
         self.convolution = torch.nn.Conv3d(
             in_channels=input_size[0],
             out_channels=out_channels,
@@ -32,6 +53,15 @@ class ConvNetLayer3D(torch.nn.Module):
         ]
 
     def forward(self, input: torch.Tensor) -> torch.Tensor:
+        """
+        Forward pass through the network
+
+        Args:
+            input (torch.Tensor): input tensor
+
+        Returns:
+            torch.Tensor: output tensor
+        """
         x = self.convolution(input)
         x = self.relu(x)
         if self.maxpool:
@@ -53,6 +83,20 @@ class ConvNet3D(torch.nn.Module):
         maxpool_strides: list[int],
         dropout_chances: list[float],
     ) -> None:
+        """
+        Creates the full network consting of the convolutional layers and the classification head.
+
+        Args:
+            n_classes (int): number of output classes
+            input_size (list[int]): size of the input image
+            out_channels_list (list[int]): list that specifies the output channels for each layer
+            kernel_sizes (list[int]): list that specifies the kernel sizes for each layer
+            strides (list[int]): list that specifies the convolution stride for each layer
+            maxpool_sizes (list[int]): list that specifies the maxpool kernel size for each layer
+            maxpool_strides (list[int]): list that specifies the maxpool stride for each layer
+            dropout_chances (list[float]): list that specifies the dropout chance for each layer
+        """
+        super().__init__()
         layers = []
         for layer_idx in range(len(out_channels_list)):
             layer = ConvNetLayer3D(
@@ -68,10 +112,21 @@ class ConvNet3D(torch.nn.Module):
             input_size = layer.output_size
 
         flat_n = np.prod(input_size)
+        flatten = torch.nn.Flatten()
         classification_head = torch.nn.Linear(flat_n, n_classes)
-
+        
+        layers.append(flatten)
         layers.append(classification_head)
         self.network = torch.nn.Sequential(*layers)
 
     def forward(self, input: torch.Tensor) -> torch.Tensor:
+        """
+        Forward pass through the network
+
+        Args:
+            input (torch.Tensor): input tensor
+
+        Returns:
+            torch.Tensor: output tensor
+        """
         return self.network(input)
