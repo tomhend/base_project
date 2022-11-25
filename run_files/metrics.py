@@ -115,14 +115,8 @@ class Metrics:
 
         return {loss_name: loss}
 
-<<<<<<< HEAD
-    @register_function("acc_train_step", METRIC_FUNCTIONS)
-    @register_function("acc_train_epoch", METRIC_FUNCTIONS)
-    @register_function("acc_val_epoch", METRIC_FUNCTIONS)
-=======
     @register_function("acc", Moments.TRAIN_EPOCH, METRIC_FUNCTIONS)
     @register_function("acc", Moments.VAL_EPOCH, METRIC_FUNCTIONS)
->>>>>>> origin/main
     def accuracy(
         self,
         moment: str,
