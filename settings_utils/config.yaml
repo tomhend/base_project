@@ -25,12 +25,12 @@ model_cfg:
   name: convnet_3d
   kwargs:
     n_classes: 1
-    input_size: [1, 20, 128, 128]
-    out_channels_list: [8, 16, 32]
-    kernel_sizes: [7, 3, 3]
-    strides: [1, 1, 1]
-    maxpool_sizes: [3, 2, 2]
-    maxpool_strides: [3, 2, 2]
+    input_size: [1, 40, 256, 256]
+    out_channels_list: [8, 16, 32, 64]
+    kernel_sizes: [7, 3, 3, 3]
+    strides: [1, 1, 1, 1]
+    maxpool_sizes: [3, 2, 2, 2]
+    maxpool_strides: [3, 2, 2, 2]
     dropout_chances: [null, null, null]
 
 loss_cfg:
