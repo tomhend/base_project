@@ -11,17 +11,29 @@ from typing import Callable
 import torch
 
 
-def register_function(name: str, func_dict: dict):
+class Moments:
+    """
+    Class that holds the constants for the moments on which functions are run
+    """
+
+    TRAIN_STEP = "train_step"
+    VAL_STEP = "val_step"
+    TRAIN_EPOCH = "train_epoch"
+    VAL_EPOCH = "val_epoch"
+
+
+def register_function(name: str, moment: str, func_dict: dict):
     """
     Registers a function to a dictionary with the given name as key and the function as value.
 
     Args:
         name (str): name of the function
+        moment (str): moment the function should be run, has to be in Moments
         func_dict (dict): dictionary the function should be added to
     """
 
     def decorate(fnc: Callable):
-        func_dict[name] = fnc
+        func_dict[name + "_" + moment] = fnc
         return fnc
 
     return decorate
@@ -83,10 +95,10 @@ class Metrics:
 
         return metrics_dict
 
-    @register_function("loss_train_step", METRIC_FUNCTIONS)
-    @register_function("loss_val_step", METRIC_FUNCTIONS)
-    @register_function("loss_train_epoch", METRIC_FUNCTIONS)
-    @register_function("loss_val_epoch", METRIC_FUNCTIONS)
+    @register_function("loss", Moments.TRAIN_STEP, METRIC_FUNCTIONS)
+    @register_function("loss", Moments.VAL_STEP, METRIC_FUNCTIONS)
+    @register_function("loss", Moments.TRAIN_EPOCH, METRIC_FUNCTIONS)
+    @register_function("loss", Moments.VAL_EPOCH, METRIC_FUNCTIONS)
     def loss(self, moment: str, loss: float, **_) -> dict[str, float]:
         """
         Return the loss in a dictionary with the moment added to the name. This function only exists
@@ -103,9 +115,14 @@ class Metrics:
 
         return {loss_name: loss}
 
+<<<<<<< HEAD
     @register_function("acc_train_step", METRIC_FUNCTIONS)
     @register_function("acc_train_epoch", METRIC_FUNCTIONS)
     @register_function("acc_val_epoch", METRIC_FUNCTIONS)
+=======
+    @register_function("acc", Moments.TRAIN_EPOCH, METRIC_FUNCTIONS)
+    @register_function("acc", Moments.VAL_EPOCH, METRIC_FUNCTIONS)
+>>>>>>> origin/main
     def accuracy(
         self,
         moment: str,
@@ -124,7 +141,7 @@ class Metrics:
             moment (str): string containing the moment to look for in the metric name
             output (torch.Tensor, optional): output tensor of the model. Defaults to None
             outputs (list[torch.Tensor], optional): list of output tensors of the model.
-                Defaults to None
+            Defaults to None
             label (torch.Tensor, optional): label tensor. Defaults to None
             labels (list[torch.Tensor], optional): list of label tensors. Defaults to None.
 

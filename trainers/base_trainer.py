@@ -9,7 +9,7 @@ from tqdm import tqdm
 from torch.utils.data import DataLoader
 
 from run_files.run_logger import RunLogger
-from run_files.metrics import Metrics
+from run_files.metrics import Metrics, Moments
 
 
 class BaseTrainer:
@@ -23,7 +23,7 @@ class BaseTrainer:
         device (str): name of the device to train on
         metrics (Metrics): instance of Metrics that handles the metric calculation
         run_logger (RunLogger, optional): the logger that handles the logging of training
-            and validation info
+        and validation info
     """
 
     def __init__(
@@ -73,7 +73,7 @@ class BaseTrainer:
         """
         self.model.train()
 
-        #_inputs = []
+        # _inputs = []
         labels = []
         outputs = []
         losses = []
@@ -81,7 +81,11 @@ class BaseTrainer:
         for i, (_input, label) in enumerate(tqdm(dataloader)):
             step = epoch * len(dataloader) + i
 
+<<<<<<< HEAD
             _input = _input.to(self.device)
+=======
+            # _input = _input.to(self.device) may cause memory issues with large datasets
+>>>>>>> origin/main
             label = label.to(self.device)
             self.optimizer.zero_grad()
 
@@ -92,15 +96,15 @@ class BaseTrainer:
             self.optimizer.step()
 
             step_metrics = self.metrics.calculate_metrics(
-                moment="train_step",
-                #_input=_input.detach(), may cause memory issues with large datasets
+                moment=Moments.TRAIN_STEP,
+                # _input=_input.detach(), may cause memory issues with large datasets
                 label=label.detach(),
                 output=output.detach(),
                 loss=loss.item(),
             )
-            step_metrics.update({"train_step": step})
+            step_metrics.update({Moments.TRAIN_STEP: step})
 
-            #_inputs.append(_input) may cause memory issues with large datasets
+            # _inputs.append(_input) may cause memory issues with large datasets
             labels.append(label.detach())
             outputs.append(output.detach())
             losses.append(loss.item())
@@ -110,8 +114,8 @@ class BaseTrainer:
 
         epoch_loss = np.array(losses).mean()
         epoch_metrics = self.metrics.calculate_metrics(
-            moment="train_epoch",
-            #_inputs=_inputs, may cause memory issues with large datasets
+            moment=Moments.TRAIN_EPOCH,
+            # _inputs=_inputs, may cause memory issues with large datasets
             labels=labels,
             outputs=outputs,
             loss=epoch_loss,
@@ -150,7 +154,7 @@ class BaseTrainer:
                 loss = self.loss_fn(output, label)
 
                 step_metrics = self.metrics.calculate_metrics(
-                    moment="val_step",
+                    moment=Moments.VAL_STEP,
                     _input=_input,
                     label=label,
                     output=output,
@@ -167,7 +171,7 @@ class BaseTrainer:
 
             epoch_loss = np.array(losses).mean()
             epoch_metrics = self.metrics.calculate_metrics(
-                moment="val_epoch",
+                moment=Moments.VAL_EPOCH,
                 _inputs=_inputs,
                 labels=labels,
                 outputs=outputs,

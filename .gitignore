@@ -6,9 +6,6 @@ code_scraps.ipynb
 
 # Ignore data folders
 data/*
-models/test_models/MedicalNet_pytorch_files2
-input_files/*
-models/weights/*
 models/trained_models/*
 models/weights/*
 input_files/*

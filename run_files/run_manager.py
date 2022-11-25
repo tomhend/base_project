@@ -140,7 +140,7 @@ class RunManager:
                     )
                     torch.save(
                         self.model.state_dict(),
-                        f"models/saved_models/trained_models/{model_name}.pt",
+                        f"models/trained_models/{model_name}.pt",
                     )
                 continue
 
@@ -153,7 +153,7 @@ class RunManager:
                 )
                 torch.save(
                     self.model.state_dict(),
-                    f"models/saved_models/trained_models/{model_name}.pt",
+                    f"models/trained_models/{model_name}.pt",
                 )
 
     @staticmethod

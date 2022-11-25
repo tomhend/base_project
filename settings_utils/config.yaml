@@ -22,12 +22,16 @@ trainer_cfg:
   name: base_trainer
 
 model_cfg:
-  name: medical_net50
+  name: convnet_3d
   kwargs:
-    pretrain: True
-    weights_path: .\models\weights\resnet_50_23dataset.pth
-    input_shape: [20, 128, 128]
     n_classes: 1
+    input_size: [1, 20, 128, 128]
+    out_channels_list: [8, 16, 32]
+    kernel_sizes: [7, 3, 3]
+    strides: [1, 1, 1]
+    maxpool_sizes: [3, 2, 2]
+    maxpool_strides: [3, 2, 2]
+    dropout_chances: [null, null, null]
 
 loss_cfg:
   name: bce_logits
