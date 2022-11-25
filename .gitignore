@@ -9,7 +9,7 @@ data/*
 models/test_models/MedicalNet_pytorch_files2
 input_files/*
 models/weights/*
-models/saved_models/*
+models/trained_models/*
 models/weights/*
 input_files/*
 
