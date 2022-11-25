@@ -31,7 +31,7 @@ model_cfg:
     strides: [1, 1, 1, 1]
     maxpool_sizes: [3, 2, 2, 2]
     maxpool_strides: [3, 2, 2, 2]
-    dropout_chances: [null, null, null]
+    dropout_chances: [null, null, null, null]
 
 loss_cfg:
   name: bce_logits
