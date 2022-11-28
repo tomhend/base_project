@@ -14,7 +14,7 @@ class ProsabCTDataset(Dataset):
         self.index_df = pd.read_csv(index_file_path)
         self._transforms = transforms.Compose(
             [
-                CustomResize((1, 0.25, 0.25)),
+                CustomResize((1, 0.125, 0.125)),
                 CustomClip(0, 100),
                 CustomMinMaxNormalize(0, 100),
             ]

@@ -30,7 +30,7 @@ class RunLogger:
         Args:
             model (torch.nn.Module): the model that should be logged
         """
-        wandb.watch(model, log='all')
+        wandb.watch(model, log='all', log_freq = 1)
     
     def log_metrics(self, metrics_dict: dict[str, any]) -> None:
         """

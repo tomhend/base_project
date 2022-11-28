@@ -27,24 +27,29 @@ class MedicalNet10(torch.nn.Module):
                 for k, v in pretrain["state_dict"].items()
                 if k[7:] in net_dict.keys()
             }
+
             net_dict.update(pretrain_dict)
             model.load_state_dict(net_dict)
 
         self.medicalnet = nn.Sequential(
-            *list(model.children())[:-1], nn.ReLU(), nn.AdaptiveAvgPool3d((1, 1, 1))
+            *list(model.children())[:-1], nn.LeakyReLU(), nn.AdaptiveAvgPool3d((5, 5, 5))
         )
 
-        # for param in self.medicalnet.parameters():
-        #    param.requires_grad = False
-        # for param in list(self.medicalnet.children())[0].parameters():
-        #    param.requires_grad = True
+        #for param in self.medicalnet.parameters():
+        #   param.requires_grad = False
+        #for param in list(self.medicalnet.children())[0].parameters():
+        #   param.requires_grad = True
+        
         self.flatten = nn.Flatten()
-        self.fc1 = nn.Linear(512, 1)
+        self.relu = nn.ReLU()
+        self.fc1 = nn.Linear(125*512, 1)
+        #self.fc2 = nn.Linear(512, 1)
 
     def forward(self, x) -> torch.Tensor:
         mn_out = self.medicalnet(x)
-        out = self.fc1(self.flatten(mn_out))
-        return out
+        out_1 = self.fc1(self.flatten(mn_out))
+        #out_2 = self.fc2(self.relu(out_1))
+        return out_1
 
 
 class MedicalNet50(torch.nn.Module):

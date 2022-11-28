@@ -112,19 +112,21 @@ class ConvNet3D(torch.nn.Module):
             layers.append(layer)
             input_size = layer.output_size
 
-        flat_n = np.prod(input_size)
+        avg_pool = torch.nn.AdaptiveAvgPool3d((5, 5, 5))
+        flat_n = 125*input_size[0]
         flatten = torch.nn.Flatten()
         relu = torch.nn.ReLU()
-        classification_head1 = torch.nn.Linear(flat_n, 1024)
-        classification_head2 = torch.nn.Linear(1024, 256)
-        classification_head3 = torch.nn.Linear(256, n_classes)
+        classification_head1 = torch.nn.Linear(flat_n, n_classes)
+        #classification_head2 = torch.nn.Linear(1024, n_classes)
+        #classification_head3 = torch.nn.Linear(256, n_classes)
 
+        layers.append(avg_pool)
         layers.append(flatten)
         layers.append(classification_head1)
-        layers.append(relu)
-        layers.append(classification_head2)
-        layers.append(relu)
-        layers.append(classification_head3)
+        #layers.append(relu)
+        #layers.append(classification_head2)
+        #layers.append(relu)
+        #layers.append(classification_head3)
 
         self.network = torch.nn.Sequential(*layers)
 

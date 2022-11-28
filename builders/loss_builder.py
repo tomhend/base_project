@@ -37,7 +37,7 @@ def bce_logits(**kwargs: dict[str, any]) -> torch.nn.BCEWithLogitsLoss:
         torch.nn.BCEWithLogitsLoss: BCEWithLogitsLoss object initialized with kwargs
     """
     if kwargs.get("pos_weight", None):
-        kwargs["pos_weight"] = torch.Tensor([kwargs["pos_weight"]])
+        kwargs["pos_weight"] = torch.tensor([kwargs["pos_weight"]])
     loss_fn = torch.nn.BCEWithLogitsLoss(**kwargs)
     return loss_fn
 

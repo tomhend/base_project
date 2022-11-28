@@ -73,8 +73,7 @@ class BaseTrainer:
             dict[str, any]: the metrics calculated at the end of the epoch
         """
         self.model.train()
-        if self.run_logger:
-            wandb.watch(self.model, log='all')
+
         # _inputs = []
         labels = []
         outputs = []

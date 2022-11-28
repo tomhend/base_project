@@ -107,6 +107,7 @@ class RunManager:
         )
         if self.logger:
             self.trainer.set_run_logger(self.logger)
+            self.logger.watch_model(self.model)
 
     def start_training(self) -> None:
         """

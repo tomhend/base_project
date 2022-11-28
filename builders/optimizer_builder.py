@@ -44,5 +44,24 @@ def adam(model_parameters, **kwargs) -> torch.optim.Adam:
     optimizer = torch.optim.Adam(model_parameters, **kwargs)
     return optimizer
 
+def sgd(model_parameters, **kwargs) -> torch.optim.SGD:
+    """
+    Builds the torch sgd optimizer with the specifications found in the kwargs.
 
-OPTIMIZER_CONSTRUCTORS = {"adam": adam}
+    Args:
+        model_parameters (Generator[torch.Tensor, None, None]): the parameters that should be
+        optimized, taken from the model with model.parameters()
+        kwargs(dict[str, any]): see: https://pytorch.org/docs/stable/generated/torch.optim.SGD.html
+        for available kwargs
+
+    Returns:
+        torch.optim.SGD: and instance of torch.optim.SGD initialized with the given kwargs
+    """
+    optimizer = torch.optim.SGD(model_parameters, **kwargs)
+    return optimizer
+    
+    
+OPTIMIZER_CONSTRUCTORS = {
+    "adam": adam,
+    "sgd": sgd,
+    }
