@@ -1,0 +1,63 @@
+train_dataset_cfg:
+  name: image_3d
+  kwargs:
+    index_file_path: .\input_files\nifti_input_train.csv
+train_dataloader_cfg:
+  batch_size: 24
+  shuffle: True
+  num_workers: 8
+  drop_last: False
+
+val_dataset_cfg:
+  name: image_3d
+  kwargs:
+    index_file_path: .\input_files\nifti_input_val.csv
+val_dataloader_cfg:
+  batch_size: 6
+  shuffle: False
+  num_workers: 8
+  drop_last: False
+
+trainer_cfg:
+  name: base_trainer
+
+#model_cfg:
+#  name: medical_net10
+#  kwargs:
+#    n_classes: 1
+#    input_shape: [40, 128, 128]
+#    pretrain: True
+#    weights_path: .\models\weights\resnet_10_23dataset.pth
+
+model_cfg:
+  name: convnet_3d
+  kwargs:
+    n_classes: 1
+    input_size: [1, 40, 128, 128]
+    out_channels_list: [64, 128]
+    kernel_sizes: [5, 5]
+    strides: [1, 1]
+    maxpool_sizes: [2, 2]
+    maxpool_strides: [2, 2]
+    dropout_chances: [0.2, 0.2]
+
+loss_cfg:
+  name: bce_logits
+  kwargs:
+    pos_weight: 2.6 #209/79
+
+optimizer_cfg:
+  name: sgd
+  kwargs:
+    lr: 0.1
+
+session_cfg:
+  epochs: 5
+  metrics: ['loss_train_step', 'acc_train_epoch', 'acc_val_epoch'] #training and validation loss alway logged on epoch
+# selection metric: loss_val_epoch # NOTE: only epoch based metrics are supported for selection
+# goal: minimize
+
+log_cfg:
+  wandb_init:
+    project: base_project
+    job_type: prototype

@@ -1,0 +1,21 @@
+program: main.py
+method: grid
+metric:
+  name: loss_val_epoch
+  goal: minimize
+parameters:
+  optimizer_cfg:
+    parameters:
+      name:
+        value: 'adam'
+      kwargs:
+        parameters:
+          lr:
+            values: [0.0001, 0.001, 0.01]
+  
+  session_cfg:
+    parameters:
+      epochs: 
+        value: 8
+      metrics: 
+        value: ['loss_train_step', 'acc_train_epoch', 'acc_val_epoch']

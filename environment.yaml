@@ -1,0 +1,17 @@
+name: base_project
+channels:
+  - defaults
+  - conda-forge
+  - simpleitk
+dependencies:
+  - python=3.9
+  - torchvision
+  - wandb
+  - pytorch
+  - jupyter
+  - pyaml
+  - tqdm
+  - simpleitk
+  - pandas
+  - scipy
+prefix: /Users/tomhendriks/miniconda3/envs/base_project
