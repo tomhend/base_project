@@ -43,16 +43,45 @@ def test_resnet(**kwargs: dict[str, any]) -> torch.nn.Module:
 
 
 def medical_net10(**kwargs) -> MedicalNet10:
+    """
+    Builds a medicalnet 10 from models.architectures.medical_net with the given kwargs.
+    See: https://github.com/Tencent/MedicalNet
+
+    Args:
+        kwargs (dict[str, any]): kwargs used to construct the model.
+
+    Returns:
+        torch.nn.Module: the created MedicalNet10
+    """
     model = MedicalNet10(**kwargs)
     return model
 
 
 def medical_net50(**kwargs) -> MedicalNet50:
+     """
+    Builds a medicalnet 50 from models.architectures.medical_net with the given kwargs.
+    See: https://github.com/Tencent/MedicalNet
+
+    Args:
+        kwargs (dict[str, any]): kwargs used to construct the model.
+
+    Returns:
+        torch.nn.Module: the created MedicalNet50
+    """
     model = MedicalNet50(**kwargs)
     return model
 
 
 def convnet_3d(**kwargs: dict[str, any]) -> torch.nn.Module:
+     """
+    Builds a layered convnet3D from models.architectures.layered_3dconvnet with the given kwargs.
+
+    Args:
+        kwargs (dict[str, any]): kwargs used to construct the model.
+
+    Returns:
+        torch.nn.Module: the created MedicalNet10
+    """
     model = layered_3dconvnet.ConvNet3D(**kwargs)
     return model
 
