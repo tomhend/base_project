@@ -34,7 +34,7 @@ class MockImageDataset(Dataset):
         _transforms: torchvision.transforms.Compose = None,
     ) -> None:
         """
-        Initializes the dataset wit the given parameters.
+        Initializes the dataset with the given parameters.
 
         Args:
             size (int): number of image-outcome pairs in the dataset
