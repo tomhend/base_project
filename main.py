@@ -6,6 +6,7 @@ import logging
 
 from settings_utils import utils
 from run_files.run_manager import RunManager
+from pathlib import Path
 
 
 def run():
@@ -13,7 +14,7 @@ def run():
     Runs the program
     """
     logging.basicConfig(level=logging.INFO)
-    cfg = utils.parse_cfg("settings_utils/config.yaml")
+    cfg = utils.parse_cfg(Path("settings_utils/config.yaml"))
 
     run_manager = RunManager(cfg)
     run_manager.start_training()
