@@ -7,9 +7,7 @@ import torch
 import torchvision
 
 from models.architectures.medical_net import MedicalNet10, MedicalNet50
-
 from models.architectures import layered_3dconvnet
-
 
 def build_model(model_name: str, **kwargs: dict[str, any]) -> torch.nn.Module:
     """
@@ -58,7 +56,7 @@ def medical_net10(**kwargs) -> MedicalNet10:
 
 
 def medical_net50(**kwargs) -> MedicalNet50:
-     """
+    """
     Builds a medicalnet 50 from models.architectures.medical_net with the given kwargs.
     See: https://github.com/Tencent/MedicalNet
 
@@ -73,14 +71,14 @@ def medical_net50(**kwargs) -> MedicalNet50:
 
 
 def convnet_3d(**kwargs: dict[str, any]) -> torch.nn.Module:
-     """
+    """
     Builds a layered convnet3D from models.architectures.layered_3dconvnet with the given kwargs.
 
     Args:
         kwargs (dict[str, any]): kwargs used to construct the model.
 
     Returns:
-        torch.nn.Module: the created MedicalNet10
+        torch.nn.Module: the created ConvNet3D
     """
     model = layered_3dconvnet.ConvNet3D(**kwargs)
     return model
